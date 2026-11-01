@@ -1,0 +1,98 @@
+[    0.00 ->     2.02] Salut à tous et bienvenue dans ce cours sur Open Code,
+[    2.22 ->     3.72] l'alternative Open Source à Cloud Code.
+[    4.66 ->     5.66] Avant de mettre les mains dans l'outil,
+[    5.84 ->     7.18] on va prendre un peu de recul.
+[    7.46 ->     8.70] Parce que pour bien utiliser un agent IA,
+[    8.76 ->    10.74] il faut comprendre ce qu'il y a dedans et d'où ça vient.
+[   11.12 ->    12.66] Donc, on part de la théorie,
+[   12.86 ->    14.38] et peu est à petit, on va aller vers la pratique
+[   14.38 ->    16.10] jusqu'à être si Open Code sera un vrai projet.
+[   17.08 ->    19.20] Aujourd'hui, coder avec IA ce n'est plus un truc de curieux.
+[   19.56 ->    20.46] Dans beaucoup d'entreprises,
+[   20.60 ->    21.86] c'est devenu la façon normale de travailler.
+[   23.02 ->    24.52] Du coup, la vraie question ce n'est plus
+[   24.52 ->    26.28] est-ce qu'on utilise l'IA pour coder ?
+[   26.28 ->    27.14] Ça s'est réglé.
+[   27.14 ->    29.70] La vraie question c'est, est-ce qu'on l'utilise bien ?
+[   29.70 ->    32.74] Et c'est tout l'objectif de ce cours, qu'à la fin vous sachiez faire tourner un agent
+[   32.74 ->    35.58] sur un vrai projet, mais surtout que vous sachiez où sont les pièges.
+[   36.66 ->    38.38] Alors comment on en arrive là ?
+[   38.38 ->    39.78] Faisons un petit retour en arrière.
+[   40.12 ->    44.18] Avant 2021, on avait surtout de l'autocompletion un peu améliorée, avec des outils comme
+[   44.18 ->    45.24] Tab 9 ou Kaït.
+[   45.50 ->    47.84] Ça va vous compléter à la fin de la ligne, pratique, mais ça s'arrête
+[   47.84 ->    47.98] là.
+[   48.48 ->    52.10] En 2021, Kitup Copilot arrive, et là c'est la première fois qu'un modèle
+[   52.10 ->    55.98] de langage vous propose des fonctions entières, directement dans l'éditeur,
+[   55.98 ->    60.34] Mais ça reste de la suggestion. L'outil propose et c'est vous qui l'acceptons ou pas.
+[   60.68 ->    64.06] Fin 2022, Chagiput est sort. Et on découvre le format de conversation.
+[   64.96 ->    70.64] On décrit son problème en français, on a une réponse. Par contre, il faut tout faire à la main, copier son code dans la fenêtre,
+[   71.16 ->    77.20] recopier la récompense dans l'éditeur, et recommencer à la moindre erreur. En 2023 et 2024, apparaissent les premiers agents.
+[   78.14 ->    80.22] L'idée c'est de donner au modèle des outils et une boucle.
+[   80.64 ->    83.68] Il peut lire des fichiers, lancer des commandes, voir ce qui se passe et réessayer.
+[   83.68 ->    88.76] Et en 2025, ces agents deviennent grand public, avec Cloud Code, Cursor en mode agent, et
+[   88.76 ->    90.54] des alternatives open source comme Open Code.
+[   91.56 ->    94.78] Si on devait résumer tout ça en une phrase, on est passé d'un assistant qui suggère
+[   94.78 ->    96.12] à un agent qui agit.
+[   96.24 ->    99.72] Avant, l'outil vous proposait du code et c'était à vous de le copier, de le lancer
+[   99.72 ->   100.26] et de le tester.
+[  101.20 ->   104.76] Maintenant, l'agent lit votre projet, modifie les fichiers, lance les commandes
+[  104.76 ->   106.00] et vérifie lui même si ça marche.
+[  106.52 ->   108.02] Et forcément, ça change notre métier.
+[  108.22 ->   110.84] Ce qui compte de plus en plus, ce n'est plus de taper vite, c'est de savoir
+[  110.84 ->   114.98] cadrer un problème, donner le bon contexte à l'IA et surtout relire du code qu'on n'a pas écrit
+[  114.98 ->   119.78] soi-même. Maintenant ouvrons le capot. Au coeur de tous ces outils, il est ce qu'on appelle un
+[  119.78 ->   125.72] LLM pour Large Language Model, un grand modèle de langage. Et en vrai, le principe est super
+[  125.72 ->   129.94] simple. Un LLM c'est une fonction qui prend un début de texte et qui prédit le morceau qui
+[  129.94 ->   134.76] vient après, c'est tout. Prenons un exemple. Si je vous dis le développeur relance les,
+[  135.36 ->   139.38] vous avez sûrement une idée de la suite, le modèle aussi. Il n'y a qu'une probabilité pour
+[  139.38 ->   143.90] suite possible, test, c'est très probable, commande un peu moins, des, presque pas,
+[  144.72 ->   148.34] et choisi parmi les plus probable. Alors pourquoi ça a l'air aussi intelligent ?
+[  148.34 ->   151.60] Juste parce que cette fonction est gigantesque et qu'elle a été entraînée sur une quantité de
+[  151.60 ->   154.80] textes énorme. Mais à la base, c'est vraiment ça, préduire la suite.
+[  156.20 ->   160.14] Petit détail important, le modèle ne lit pas des mots, il lit des tokens, c'est à dire des
+[  160.14 ->   164.20] morceaux de mots. Par exemple, un mot comme développement peut être découpé en 3 ou 4
+[  164.20 ->   168.52] tokens. En anglais, on compte en moyenne un token pour à peu près 4 caractères.
+[  168.52 ->   172.28] Et pourquoi c'est important pour nous ? Parce qu'avec un LLM, tout ce qu'on tente en token,
+[  172.88 ->   176.86] ce que vous lui envoyez, ce qu'il vous répond, et donc, ce que ça vous coûte.
+[  177.24 ->   180.48] On y parviendrait plus tard, notamment quand on parlera du prix d'utilisation d'un
+[  180.48 ->   181.96] agent comme OpenCode.
+[  182.20 ->   185.28] Maintenant, comment on obtient un LLM ? En gros, il y a 3 étapes.
+[  185.52 ->   186.52] La première, c'est le prêt-en-traînement.
+[  187.00 ->   190.08] On montre au modèle une quantité énorme de textes, des pages web, des livres,
+[  190.14 ->   190.58] du code.
+[  191.10 ->   194.66] On parle de milliers de milliards de tokens, et on lui fait faire un seul exercice,
+[  194.80 ->   195.50] encore et encore.
+[  196.00 ->   197.14] Dévinez le token suivant.
+[  197.64 ->   200.96] A la fin, il connaît énormément de choses, mais il ne sait pas vraiment discuter.
+[  201.16 ->   202.50] La deuxième étape, c'est le post-entraînement.
+[  203.00 ->   206.70] On lui montre des exemples de conversations, et on l'ajuste avec des retours humains.
+[  206.92 ->   208.42] C'est ce qu'on appelle le RLHF.
+[  209.26 ->   211.70] C'est cette étape qui lui apprend à suivre des instructions et à répondre de
+[  211.70 ->   212.24] façon utile.
+[  213.08 ->   214.28] Et la troisième étape, c'est l'inférence.
+[  214.56 ->   215.80] Ça, c'est quand vous l'utilisez.
+[  216.14 ->   219.40] Le modèle génère un token, l'ajoute à la suite du texte, génère le suivant
+[  219.40 ->   219.92] et ainsi de suite.
+[  220.52 ->   223.34] C'est pour ça que vous voyez des réponses s'écrire petit à petit à l'écran.
+[  223.54 ->   225.30] De tout ça, il y a quelques points à retenir.
+[  225.30 ->   228.30] parce qu'ils expliquent la plupart des comportements bizarres que vous verrez avec ces outils.
+[  229.94 ->   233.18] D'abord, un LLM c'est pas une base de données, il va pas chercher l'info quelque part,
+[  233.50 ->   234.74] il génère la suite les plus probable.
+[  235.66 ->   236.30] Ensuite, il a pas de mémoire.
+[  237.08 ->   238.34] Entre deux appels, il se souvient de rien.
+[  239.00 ->   241.90] Tout ce qui cède votre tâche, c'est ce que vous lui avez donné au moment où vous l'appelez.
+[  242.34 ->   245.22] On appelle ça le contexte, et on en reparlera beaucoup plus tard parce que c'est central.
+[  245.80 ->   247.78] Autre chose, il peut aléfiné.
+[  247.96 ->   250.44] Produit du texte qui a l'air juste, pas du texte vérifié.
+[  250.62 ->   254.36] Il peut nous inventer une fonction qui n'existe pas, avec exactement la même assurance qu'une vraie.
+[  254.36 ->   255.76] Il a aussi une dette de coupure.
+[  255.96 ->   258.24] Tout ce qui est sorti après son entraînement, bah il le connaît pas.
+[  258.64 ->   260.48] Et en fait, sa fenêtre de contexte est limitée.
+[  260.66 ->   264.60] Il peut pas tout garder en tête, il a une taille maximale à ce qu'on peut lui envoyer.
+[  264.80 ->   266.46] Et surtout, un LLM tout seul, ça fait rien.
+[  266.96 ->   270.10] Lorsque pas de code, il est connecté à rien, il prend du texte et renvoie du texte.
+[  270.30 ->   272.50] En fait, un LLM seul, c'est un peu un cerveau dans un bocal.
+[  273.18 ->   275.28] Il est très intelligent, mais il a juste pas de bras et pas de jambes.
+[  276.18 ->   279.30] Dans la prochaine vidéo, on va voir comment on lui donne un corps, des outils, une boucle,
+[  279.40 ->   281.76] et c'est comme ça qu'on passe d'un simple modèle à un vrai agent IA.

@@ -1,0 +1,550 @@
+1
+00:00:00,500 --> 00:00:02,730
+Salut à tous et bienvenue
+dans ce cours sur Open Code,
+
+2
+00:00:02,780 --> 00:00:04,520
+l'alternative open source à Claude Code.
+
+3
+00:00:05,160 --> 00:00:07,910
+Avant de mettre les mains dans l'outil,
+on va prendre un peu de recul.
+
+4
+00:00:07,960 --> 00:00:09,330
+Parce que pour bien utiliser un agent IA,
+
+5
+00:00:09,380 --> 00:00:11,540
+il faut comprendre ce qu'il
+y a dedans et d'où ça vient.
+
+6
+00:00:11,620 --> 00:00:14,030
+Donc, on part de la théorie,
+et petit à petit,
+
+7
+00:00:14,080 --> 00:00:16,900
+on va aller vers la pratique jusqu'à
+essayer Open Code sur un vrai projet.
+
+8
+00:00:17,580 --> 00:00:20,000
+Aujourd'hui, coder avec l'IA,
+ce n'est plus un truc de curieux.
+
+9
+00:00:20,060 --> 00:00:22,660
+Dans beaucoup d'entreprises,
+c'est devenu la façon normale de travailler.
+
+10
+00:00:23,520 --> 00:00:26,730
+Du coup, la vraie question, ce n'est plus
+« est-ce qu'on utilise l'IA pour coder ? »
+
+11
+00:00:26,780 --> 00:00:27,590
+Ça, c'est réglé.
+
+12
+00:00:27,640 --> 00:00:30,150
+La vraie question,
+c'est : « est-ce qu'on l'utilise bien ? »
+
+13
+00:00:30,200 --> 00:00:32,990
+Et c'est tout l'objectif de ce cours,
+qu'à la fin vous sachiez faire tourner
+
+14
+00:00:33,040 --> 00:00:36,380
+un agent sur un vrai projet, mais surtout
+que vous sachiez où sont les pièges.
+
+15
+00:00:37,160 --> 00:00:38,830
+Alors comment on en arrive là ?
+
+16
+00:00:38,880 --> 00:00:40,570
+Faisons un petit retour en arrière.
+
+17
+00:00:40,620 --> 00:00:43,010
+Avant 2021, on avait surtout
+de l'autocomplétion un
+
+18
+00:00:43,060 --> 00:00:45,950
+peu améliorée, avec des
+outils comme Tabnine ou Kite.
+
+19
+00:00:46,000 --> 00:00:48,780
+Ça va vous compléter à la fin de la ligne,
+pratique, mais ça s'arrête là.
+
+20
+00:00:48,980 --> 00:00:52,230
+En 2021, GitHub Copilot arrive,
+et là c'est la première fois
+
+21
+00:00:52,280 --> 00:00:55,810
+qu'un modèle de langage vous
+propose des fonctions entières,
+
+22
+00:00:55,860 --> 00:00:58,120
+directement dans l'éditeur.
+Mais ça reste de la suggestion.
+
+23
+00:00:58,180 --> 00:01:01,130
+L'outil propose et c'est
+vous qui l'acceptez ou pas.
+
+24
+00:01:01,180 --> 00:01:03,020
+Fin 2022, ChatGPT sort.
+
+25
+00:01:03,120 --> 00:01:04,860
+Et on découvre le format de conversation.
+
+26
+00:01:05,460 --> 00:01:07,760
+On décrit son problème en
+français, on a une réponse.
+
+27
+00:01:07,980 --> 00:01:08,910
+Par contre,
+
+28
+00:01:08,960 --> 00:01:11,440
+il faut tout faire à la main,
+copier son code dans la fenêtre,
+
+29
+00:01:11,660 --> 00:01:15,330
+recopier la réponse dans l'éditeur,
+et recommencer à la moindre erreur.
+
+30
+00:01:15,380 --> 00:01:18,000
+En 2023 et 2024,
+apparaissent les premiers agents.
+
+31
+00:01:18,640 --> 00:01:21,020
+L'idée c'est de donner au modèle
+des outils et une boucle.
+
+32
+00:01:21,140 --> 00:01:24,130
+Il peut lire des fichiers, lancer des commandes,
+voir ce qui se passe et réessayer.
+
+33
+00:01:24,180 --> 00:01:28,190
+Et en 2025, ces agents deviennent
+grand public, avec Claude Code,
+
+34
+00:01:28,240 --> 00:01:31,340
+Cursor en mode agent,
+et des alternatives open source comme Open Code.
+
+35
+00:01:32,060 --> 00:01:33,690
+Si on devait résumer
+tout ça en une phrase,
+
+36
+00:01:33,740 --> 00:01:36,690
+on est passé d'un assistant qui
+suggère à un agent qui agit.
+
+37
+00:01:36,740 --> 00:01:38,990
+Avant, l'outil vous proposait
+du code et c'était à
+
+38
+00:01:39,040 --> 00:01:41,060
+vous de le copier,
+de le lancer et de le tester.
+
+39
+00:01:41,700 --> 00:01:44,610
+Maintenant, l'agent lit votre
+projet, modifie les fichiers,
+
+40
+00:01:44,660 --> 00:01:46,800
+lance les commandes et
+vérifie lui-même si ça marche.
+
+41
+00:01:47,020 --> 00:01:48,670
+Et forcément, ça change notre métier.
+
+42
+00:01:48,720 --> 00:01:51,010
+Ce qui compte de plus en plus,
+ce n'est plus de taper vite,
+
+43
+00:01:51,060 --> 00:01:52,480
+c'est de savoir cadrer un problème,
+
+44
+00:01:52,900 --> 00:01:54,630
+donner le bon contexte à l'IA et surtout
+
+45
+00:01:54,680 --> 00:01:57,260
+relire du code qu'on
+n'a pas écrit soi-même.
+
+46
+00:01:57,360 --> 00:01:58,630
+Maintenant, ouvrons le capot.
+
+47
+00:01:58,680 --> 00:01:59,870
+Au cœur de tous ces outils,
+il y a ce qu'on
+
+48
+00:01:59,920 --> 00:02:03,120
+appelle un LLM, pour Large Language Model,
+
+49
+00:02:03,520 --> 00:02:04,820
+un grand modèle de langage.
+
+50
+00:02:05,080 --> 00:02:06,820
+Et en vrai, le principe est super simple.
+
+51
+00:02:07,100 --> 00:02:09,590
+Un LLM c'est une fonction
+qui prend un début de texte
+
+52
+00:02:09,640 --> 00:02:11,540
+et qui prédit le morceau
+qui vient après, c'est tout.
+
+53
+00:02:12,280 --> 00:02:13,310
+Prenons un exemple.
+
+54
+00:02:13,360 --> 00:02:15,560
+Si je vous dis le développeur relance les,
+
+55
+00:02:15,860 --> 00:02:18,600
+vous avez sûrement une idée
+de la suite, le modèle aussi.
+
+56
+00:02:18,760 --> 00:02:21,710
+Il calcule une probabilité pour
+chaque suite possible : « tests »,
+
+57
+00:02:21,760 --> 00:02:24,700
+c'est très probable, « commandes »,
+un peu moins, « dés », presque pas.
+
+58
+00:02:25,220 --> 00:02:26,640
+Et il choisit parmi les plus probables.
+
+59
+00:02:26,840 --> 00:02:28,790
+Alors pourquoi ça a
+l'air aussi intelligent ?
+
+60
+00:02:28,840 --> 00:02:30,990
+Juste parce que cette fonction
+est gigantesque et qu'elle
+
+61
+00:02:31,040 --> 00:02:33,170
+a été entraînée sur une
+quantité de textes énorme.
+
+62
+00:02:33,220 --> 00:02:35,600
+Mais à la base, c'est vraiment ça,
+prédire la suite.
+
+63
+00:02:36,700 --> 00:02:39,920
+Petit détail important, le modèle ne
+lit pas des mots, il lit des tokens,
+
+64
+00:02:40,260 --> 00:02:41,470
+c'est-à-dire des morceaux de mots.
+
+65
+00:02:41,520 --> 00:02:45,320
+Par exemple, un mot comme développement
+peut être découpé en 3 ou 4 tokens.
+
+66
+00:02:45,600 --> 00:02:48,970
+En anglais, on compte en moyenne un
+token pour à peu près 4 caractères.
+
+67
+00:02:49,020 --> 00:02:50,890
+Et pourquoi c'est important pour nous ?
+
+68
+00:02:50,940 --> 00:02:53,080
+Parce qu'avec un LLM,
+tout se compte en tokens :
+
+69
+00:02:53,380 --> 00:02:55,220
+ce que vous lui envoyez,
+ce qu'il vous répond,
+
+70
+00:02:55,500 --> 00:02:57,660
+et donc, ce que ça vous coûte.
+
+71
+00:02:57,740 --> 00:02:59,490
+On y reviendra plus tard,
+notamment quand on parlera
+
+72
+00:02:59,540 --> 00:03:02,650
+du prix d'utilisation d'un
+agent comme Open Code.
+
+73
+00:03:02,700 --> 00:03:04,490
+Maintenant, comment on obtient un LLM ?
+
+74
+00:03:04,540 --> 00:03:05,970
+En gros, il y a trois étapes.
+
+75
+00:03:06,020 --> 00:03:07,320
+La première, c'est le pré-entraînement.
+
+76
+00:03:07,500 --> 00:03:09,610
+On montre au modèle une
+quantité énorme de textes,
+
+77
+00:03:09,660 --> 00:03:11,380
+des pages web, des livres, du code.
+
+78
+00:03:11,600 --> 00:03:13,260
+On parle de milliers de
+milliards de tokens,
+
+79
+00:03:13,680 --> 00:03:16,300
+et on lui fait faire un seul
+exercice, encore et encore.
+
+80
+00:03:16,500 --> 00:03:17,940
+Deviner le token suivant.
+
+81
+00:03:18,140 --> 00:03:21,610
+À la fin, il connaît énormément de choses,
+mais il ne sait pas vraiment discuter.
+
+82
+00:03:21,660 --> 00:03:23,300
+La deuxième étape,
+c'est le post-entraînement.
+
+83
+00:03:23,500 --> 00:03:25,280
+On lui montre des exemples
+de conversations,
+
+84
+00:03:25,660 --> 00:03:27,370
+et on l'ajuste avec des retours humains.
+
+85
+00:03:27,420 --> 00:03:29,220
+C'est ce qu'on appelle le RLHF.
+
+86
+00:03:29,760 --> 00:03:31,490
+C'est cette étape qui
+lui apprend à suivre des
+
+87
+00:03:31,540 --> 00:03:33,040
+instructions et à répondre de façon utile.
+
+88
+00:03:33,580 --> 00:03:35,010
+Et la troisième étape, c'est l'inférence.
+
+89
+00:03:35,060 --> 00:03:36,590
+Ça, c'est quand vous l'utilisez.
+
+90
+00:03:36,640 --> 00:03:39,350
+Le modèle génère un token,
+l'ajoute à la suite du texte,
+
+91
+00:03:39,400 --> 00:03:40,720
+génère le suivant et ainsi de suite.
+
+92
+00:03:41,020 --> 00:03:43,990
+C'est pour ça que vous voyez des réponses
+s'écrire petit à petit à l'écran.
+
+93
+00:03:44,040 --> 00:03:45,750
+De tout ça,
+il y a quelques points à retenir,
+
+94
+00:03:45,800 --> 00:03:47,710
+parce qu'ils expliquent la
+plupart des comportements
+
+95
+00:03:47,760 --> 00:03:49,100
+bizarres que vous verrez avec ces outils.
+
+96
+00:03:50,440 --> 00:03:52,330
+D'abord, un LLM c'est
+pas une base de données,
+
+97
+00:03:52,380 --> 00:03:55,540
+il va pas chercher l'info quelque part,
+il génère la suite la plus probable.
+
+98
+00:03:56,160 --> 00:03:57,460
+Ensuite, il a pas de mémoire.
+
+99
+00:03:57,580 --> 00:03:59,140
+Entre deux appels, il se souvient de rien.
+
+100
+00:03:59,500 --> 00:04:00,590
+Tout ce qu'il sait de votre tâche,
+
+101
+00:04:00,640 --> 00:04:02,700
+c'est ce que vous lui donnez
+au moment où vous l'appelez.
+
+102
+00:04:02,840 --> 00:04:04,710
+On appelle ça le contexte,
+et on en reparlera
+
+103
+00:04:04,760 --> 00:04:06,060
+beaucoup plus tard
+parce que c'est central.
+
+104
+00:04:06,300 --> 00:04:08,410
+Autre chose, il peut halluciner.
+
+105
+00:04:08,460 --> 00:04:11,070
+Il produit du texte qui a l'air juste,
+pas du texte vérifié.
+
+106
+00:04:11,120 --> 00:04:13,230
+Il peut nous inventer une
+fonction qui n'existe pas,
+
+107
+00:04:13,280 --> 00:04:14,810
+avec exactement la même
+assurance qu'une vraie.
+
+108
+00:04:14,860 --> 00:04:16,410
+Il a aussi une date de coupure.
+
+109
+00:04:16,460 --> 00:04:19,040
+Tout ce qui est sorti après son
+entraînement, bah il le connaît pas.
+
+110
+00:04:19,140 --> 00:04:21,110
+Et enfin, sa fenêtre de
+contexte est limitée.
+
+111
+00:04:21,160 --> 00:04:22,330
+Il peut pas tout garder en tête,
+
+112
+00:04:22,380 --> 00:04:25,250
+il a une taille maximale à
+ce qu'on peut lui envoyer.
+
+113
+00:04:25,300 --> 00:04:27,260
+Et surtout, un LLM tout seul,
+ça fait rien.
+
+114
+00:04:27,460 --> 00:04:30,750
+Il lance pas de code, il est connecté à rien,
+il prend du texte et renvoie du texte.
+
+115
+00:04:30,800 --> 00:04:33,300
+En fait, un LLM seul, c'est un
+peu un cerveau dans un bocal.
+
+116
+00:04:33,680 --> 00:04:36,080
+Il est très intelligent, mais il a
+juste pas de bras et pas de jambes.
+
+117
+00:04:36,680 --> 00:04:39,470
+Dans la prochaine vidéo, on va voir
+comment on lui donne un corps, des outils,
+
+118
+00:04:39,520 --> 00:04:42,260
+une boucle, et c'est comme ça qu'on passe
+d'un simple modèle à un vrai agent IA.

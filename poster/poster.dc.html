@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Poster scientifique OpenCode</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&amp;family=Roboto+Mono:wght@500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#0b5f91}a:hover{color:#083f61}
+</style>
+</helmet>
+<div style="width: 1123px; height: 1587px; box-sizing: border-box; background: #ffffff; color: #1f2937; font-family: Roboto, sans-serif; display: flex; flex-direction: column; overflow: hidden">
+
+<header style="background: {{accent}}; color: #ffffff; padding: 36px 56px 32px 56px; display: flex; justify-content: space-between; align-items: flex-start; gap: 32px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<div style="font-size: 14px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase">FYC · ESGI · 4e année · 2026–2027</div>
+<h1 style="margin: 0; font-size: 80px; line-height: 1; font-weight: 900; letter-spacing: -0.02em">OpenCode</h1>
+<div style="font-size: 26px; font-weight: 300">L'alternative open source à Claude Code</div>
+<div style="font-size: 15px; margin-top: 6px">[Prénom Nom], [Prénom Nom], [Prénom Nom], [Prénom Nom] · encadré par [Nom du mentor]</div>
+</div>
+<div style="display: flex; gap: 16px">
+<div style="width: 120px; height: 120px; box-sizing: border-box; border: 1px dashed #ffffff; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 13px">[logo ESGI]</div>
+<div style="width: 120px; height: 120px; box-sizing: border-box; border: 1px dashed #ffffff; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 13px">[logo FYC]</div>
+</div>
+</header>
+
+<main style="flex: 1; padding: 32px 56px 0 56px; display: flex; flex-direction: column; gap: 24px">
+
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 32px">
+<section>
+<div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px"><span style="font-family: 'Roboto Mono', monospace; font-size: 14px; font-weight: 500; color: {{accent}}">01</span><h2 style="margin: 0; font-size: 22px; font-weight: 700; color: #111827">Contexte et état de l'art</h2></div>
+<div style="display: grid; grid-template-columns: 84px minmax(0, 1fr); font-size: 14.5px; line-height: 1.4">
+<div style="padding: 7px 0; border-bottom: 1px solid #e5e7eb; font-weight: 700; color: {{accent}}">&lt; 2021</div><div style="padding: 7px 0; border-bottom: 1px solid #e5e7eb">Autocomplétion : l'outil finit la ligne</div>
+<div style="padding: 7px 0; border-bottom: 1px solid #e5e7eb; font-weight: 700; color: {{accent}}">2021</div><div style="padding: 7px 0; border-bottom: 1px solid #e5e7eb">GitHub Copilot : l'IA <b>suggère</b> du code <span style="color: {{accent}}">[Chen et al., 2021]</span></div>
+<div style="padding: 7px 0; border-bottom: 1px solid #e5e7eb; font-weight: 700; color: {{accent}}">2022</div><div style="padding: 7px 0; border-bottom: 1px solid #e5e7eb">ChatGPT : l'IA <b>répond</b> <span style="color: {{accent}}">[Ouyang et al., 2022]</span></div>
+<div style="padding: 7px 0; border-bottom: 1px solid #e5e7eb; font-weight: 700; color: {{accent}}">2023–24</div><div style="padding: 7px 0; border-bottom: 1px solid #e5e7eb">Premiers agents : outils et boucle <span style="color: {{accent}}">[Yao et al., 2023]</span></div>
+<div style="padding: 7px 0; font-weight: 700; color: {{accent}}">2025</div><div style="padding: 7px 0">L'IA <b>agit</b> : Claude Code <span style="color: {{accent}}">[Anthropic, 2025]</span>, OpenCode <span style="color: {{accent}}">[SST, 2025]</span></div>
+</div>
+</section>
+<section>
+<div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 12px"><span style="font-family: 'Roboto Mono', monospace; font-size: 14px; font-weight: 500; color: {{accent}}">02</span><h2 style="margin: 0; font-size: 22px; font-weight: 700; color: #111827">Problématique</h2></div>
+<p style="margin: 0; font-size: 15px; line-height: 1.55">Les agents de développement les plus utilisés sont propriétaires et liés à un seul fournisseur de modèles. OpenCode propose une alternative open source. Mais mal utilisé, un agent peut produire du code faux, coûter cher en tokens ou exposer le code d'un projet.</p>
+<p style="margin: 10px 0 0 0; font-size: 15px; line-height: 1.55; font-weight: 500; color: #111827">OpenCode est-il une alternative crédible à Claude Code, et comment l'utiliser efficacement et en sécurité sur un vrai projet ?</p>
+</section>
+</div>
+
+<section>
+<div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 6px"><span style="font-family: 'Roboto Mono', monospace; font-size: 14px; font-weight: 500; color: {{accent}}">03</span><h2 style="margin: 0; font-size: 22px; font-weight: 700; color: #111827">Comment fonctionne un agent IA</h2></div>
+<p style="margin: 0 0 4px 0; font-size: 15px; line-height: 1.5; color: #374151">Un LLM seul prédit la suite d'un texte <span style="color: {{accent}}">[Vaswani et al., 2017]</span>. L'agent l'entoure d'outils et d'une boucle <span style="color: {{accent}}">[Yao et al., 2023 ; Schick et al., 2023]</span>. Son efficacité dépend du contexte fourni <span style="color: {{accent}}">[Liu et al., 2024]</span>, que le protocole MCP permet d'enrichir <span style="color: {{accent}}">[Anthropic, 2024]</span>.</p>
+<div style="position: relative; width: 1011px; height: 175px">
+<svg width="82" height="8" viewBox="0 0 82 8" preserveAspectRatio="none" style="position: absolute; left: 190px; top: 58px; width: 82px; height: 8px; overflow: visible; fill: none; stroke: #6b7280; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round"><defs><marker id="dc-arrow-head-filled-1" orient="auto" markerWidth="5" markerHeight="5" refX="2" refY="2" overflow="visible"><path d="M0 0 L4 2 L0 4 Z" fill="#6b7280" stroke="none" style="stroke: none; fill: #6b7280; fill: context-stroke"></path></marker></defs><path d="M 0 4 L 78 4" marker-end="url(#dc-arrow-head-filled-1)"></path></svg>
+<svg width="82" height="8" viewBox="0 0 82 8" preserveAspectRatio="none" style="position: absolute; left: 463px; top: 58px; width: 82px; height: 8px; overflow: visible; fill: none; stroke: #6b7280; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round"><defs><marker id="dc-arrow-head-filled-2" orient="auto" markerWidth="5" markerHeight="5" refX="2" refY="2" overflow="visible"><path d="M0 0 L4 2 L0 4 Z" fill="#6b7280" stroke="none" style="stroke: none; fill: #6b7280; fill: context-stroke"></path></marker></defs><path d="M 0 4 L 78 4" marker-end="url(#dc-arrow-head-filled-2)"></path></svg>
+<svg width="82" height="8" viewBox="0 0 82 8" preserveAspectRatio="none" style="position: absolute; left: 736px; top: 58px; width: 82px; height: 8px; overflow: visible; fill: none; stroke: #6b7280; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round"><defs><marker id="dc-arrow-head-filled-3" orient="auto" markerWidth="5" markerHeight="5" refX="2" refY="2" overflow="visible"><path d="M0 0 L4 2 L0 4 Z" fill="#6b7280" stroke="none" style="stroke: none; fill: #6b7280; fill: context-stroke"></path></marker></defs><path d="M 0 4 L 78 4" marker-end="url(#dc-arrow-head-filled-3)"></path></svg>
+<svg width="8" height="40" viewBox="0 0 8 40" preserveAspectRatio="none" style="position: absolute; left: 910px; top: 100px; width: 8px; height: 40px; overflow: visible; fill: none; stroke: #6b7280; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round"><path d="M 4 0 L 4 40"></path></svg>
+<svg width="819" height="8" viewBox="0 0 819 8" preserveAspectRatio="none" style="position: absolute; left: 95px; top: 136px; width: 819px; height: 8px; overflow: visible; fill: none; stroke: #6b7280; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round"><path d="M 819 4 L 0 4"></path></svg>
+<svg width="8" height="39" viewBox="0 0 8 39" preserveAspectRatio="none" style="position: absolute; left: 91px; top: 101px; width: 8px; height: 39px; overflow: visible; fill: none; stroke: #6b7280; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round"><defs><marker id="dc-arrow-head-filled-4" orient="auto" markerWidth="5" markerHeight="5" refX="2" refY="2" overflow="visible"><path d="M0 0 L4 2 L0 4 Z" fill="#6b7280" stroke="none" style="stroke: none; fill: #6b7280; fill: context-stroke"></path></marker></defs><path d="M 4 39 L 4 4" marker-end="url(#dc-arrow-head-filled-4)"></path></svg>
+<div style="position: absolute; left: 0px; top: 24px; width: 190px; height: 76px; box-sizing: border-box; padding: 8px; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 15px; line-height: 20px; background: #f3f6f9; border: 1px solid #cbd5e1; border-radius: 10px"><span><b>Perception</b><br>il reçoit le contexte</span></div>
+<div style="position: absolute; left: 273px; top: 24px; width: 190px; height: 76px; box-sizing: border-box; padding: 8px; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 15px; line-height: 20px; background: #f3f6f9; border: 2px solid {{accent}}; border-radius: 10px"><span><b>Décision</b><br>le LLM choisit un outil</span></div>
+<div style="position: absolute; left: 546px; top: 24px; width: 190px; height: 76px; box-sizing: border-box; padding: 8px; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 15px; line-height: 20px; background: #f3f6f9; border: 1px solid #cbd5e1; border-radius: 10px"><span><b>Action</b><br>l'outil est exécuté</span></div>
+<div style="position: absolute; left: 819px; top: 24px; width: 190px; height: 76px; box-sizing: border-box; padding: 8px; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 15px; line-height: 20px; background: #f3f6f9; border: 1px solid #cbd5e1; border-radius: 10px"><span><b>Observation</b><br>le résultat revient</span></div>
+<div style="position: absolute; left: 324px; top: 152px; width: 360px; text-align: center; font-size: 13px; line-height: 16px; color: #4b5563">on recommence jusqu'à ce que la tâche soit finie</div>
+</div>
+</section>
+
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 32px">
+<section>
+<div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 10px"><span style="font-family: 'Roboto Mono', monospace; font-size: 14px; font-weight: 500; color: {{accent}}">04</span><h2 style="margin: 0; font-size: 22px; font-weight: 700; color: #111827">Méthode</h2></div>
+<p style="margin: 0 0 8px 0; font-size: 15px; line-height: 1.5">Un cours vidéo qui part de la théorie pour arriver à la pratique.</p>
+<ol style="margin: 0; padding: 0 0 0 20px; font-size: 15px; line-height: 1.5">
+<li style="margin-bottom: 6px"><b>Théorie</b> : comprendre un LLM, un agent, le contexte et MCP.</li>
+<li style="margin-bottom: 6px"><b>Outils</b> : présenter Claude Code et OpenCode, puis installer et configurer OpenCode.</li>
+<li style="margin-bottom: 6px"><b>Pratique</b> : un cas en trois parties sur une API Node.js/Express (comprendre le projet, ajouter une fonctionnalité, corriger un bug), corrigé en vidéo.</li>
+<li><b>Analyse</b> : comparer les deux outils sur des critères documentés (licence, modèles, coût, données), puis en tirer des bonnes pratiques.</li>
+</ol>
+</section>
+<section>
+<div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 10px"><span style="font-family: 'Roboto Mono', monospace; font-size: 14px; font-weight: 500; color: {{accent}}">05</span><h2 style="margin: 0; font-size: 22px; font-weight: 700; color: #111827">Claude Code ou OpenCode ?</h2></div>
+<table style="width: 100%; border-collapse: collapse; font-size: 13.5px; line-height: 1.35">
+<thead><tr>
+<th style="text-align: left; padding: 6px 8px 6px 0; border-bottom: 2px solid #111827; width: 88px"></th>
+<th style="text-align: left; padding: 6px 8px; border-bottom: 2px solid #111827">Claude Code</th>
+<th style="text-align: left; padding: 6px 8px; border-bottom: 2px solid #111827; color: {{accent}}">OpenCode</th>
+</tr></thead>
+<tbody>
+<tr><td style="padding: 7px 8px 7px 0; border-bottom: 1px solid #e5e7eb; font-weight: 500">Licence</td><td style="padding: 7px 8px; border-bottom: 1px solid #e5e7eb">Propriétaire</td><td style="padding: 7px 8px; border-bottom: 1px solid #e5e7eb">MIT, open source</td></tr>
+<tr><td style="padding: 7px 8px 7px 0; border-bottom: 1px solid #e5e7eb; font-weight: 500">Modèles</td><td style="padding: 7px 8px; border-bottom: 1px solid #e5e7eb">Anthropic seulement</td><td style="padding: 7px 8px; border-bottom: 1px solid #e5e7eb">75+ fournisseurs et modèles locaux</td></tr>
+<tr><td style="padding: 7px 8px 7px 0; border-bottom: 1px solid #e5e7eb; font-weight: 500">Coût</td><td style="padding: 7px 8px; border-bottom: 1px solid #e5e7eb">Abonnement ou API</td><td style="padding: 7px 8px; border-bottom: 1px solid #e5e7eb">Outil gratuit, on paie le fournisseur</td></tr>
+<tr><td style="padding: 7px 8px 7px 0; border-bottom: 1px solid #e5e7eb; font-weight: 500">Données</td><td style="padding: 7px 8px; border-bottom: 1px solid #e5e7eb">Chez Anthropic</td><td style="padding: 7px 8px; border-bottom: 1px solid #e5e7eb">Au choix, ou 100 % en local</td></tr>
+<tr><td style="padding: 7px 8px 7px 0; border-bottom: 1px solid #e5e7eb; font-weight: 500">Consignes</td><td style="padding: 7px 8px; border-bottom: 1px solid #e5e7eb">CLAUDE.md</td><td style="padding: 7px 8px; border-bottom: 1px solid #e5e7eb">AGENTS.md, format ouvert</td></tr>
+<tr><td style="padding: 7px 8px 7px 0; border-bottom: 1px solid #e5e7eb; font-weight: 500">Maturité</td><td style="padding: 7px 8px; border-bottom: 1px solid #e5e7eb">Très aboutie</td><td style="padding: 7px 8px; border-bottom: 1px solid #e5e7eb">Récente, évolue vite</td></tr>
+</tbody>
+</table>
+<div style="margin-top: 6px; font-size: 12px; color: #4b5563">Sources : <span style="color: {{accent}}">[Anthropic, 2025]</span>, <span style="color: {{accent}}">[SST, 2025]</span></div>
+</section>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 32px">
+<section>
+<div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 10px"><span style="font-family: 'Roboto Mono', monospace; font-size: 14px; font-weight: 500; color: {{accent}}">06</span><h2 style="margin: 0; font-size: 22px; font-weight: 700; color: #111827">Apports du cours</h2></div>
+<p style="margin: 0; font-size: 15px; line-height: 1.5">Un cours de douze vidéos (environ 1 h 35) et un cas pratique en trois parties. À la fin, l'apprenant sait expliquer comment fonctionne un agent, configurer OpenCode avec le fournisseur de son choix et l'utiliser sur un projet existant en gardant la main sur les modifications.</p>
+<p style="margin: 10px 0 0 0; font-size: 15px; line-height: 1.5; font-weight: 500; color: #111827">OpenCode est moins abouti que Claude Code, mais il laisse au développeur le choix du modèle, des coûts et de l'endroit où partent ses données.</p>
+</section>
+<section>
+<div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 10px"><span style="font-family: 'Roboto Mono', monospace; font-size: 14px; font-weight: 500; color: {{accent}}">07</span><h2 style="margin: 0; font-size: 22px; font-weight: 700; color: #111827">Limites et perspectives</h2></div>
+<ul style="margin: 0; padding: 0 0 0 18px; font-size: 15px; line-height: 1.5">
+<li style="margin-bottom: 4px">OpenCode évolue vite : ses commandes changent d'une version à l'autre.</li>
+<li style="margin-bottom: 4px">La qualité du résultat dépend beaucoup du modèle branché sur OpenCode.</li>
+<li style="margin-bottom: 4px">Un contenu lu par l'agent peut le détourner : c'est l'injection de prompt <span style="color: {{accent}}">[Greshake et al., 2023]</span>.</li>
+<li>Piste : étudier les permissions et l'isolation des agents en entreprise.</li>
+</ul>
+</section>
+</div>
+
+</main>
+
+<footer style="padding: 0 56px 32px 56px">
+<div style="border-top: 1px solid #d1d5db; padding-top: 12px">
+<div style="font-size: 14px; font-weight: 700; color: #111827; margin-bottom: 6px">Références</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 32px; font-size: 12px; line-height: 1.45; color: #374151">
+<div>Anthropic (2024). Introducing the Model Context Protocol.</div>
+<div>Ouyang, L. et al. (2022). Training language models to follow instructions with human feedback. NeurIPS.</div>
+<div>Anthropic (2025). Claude Code overview. Documentation officielle.</div>
+<div>Schick, T. et al. (2023). Toolformer. NeurIPS.</div>
+<div>Chen, M. et al. (2021). Evaluating Large Language Models Trained on Code. arXiv.</div>
+<div>SST (2025). OpenCode, documentation officielle. opencode.ai/docs</div>
+<div>Greshake, K. et al. (2023). Indirect Prompt Injection. AISec '23.</div>
+<div>Vaswani, A. et al. (2017). Attention Is All You Need. NeurIPS.</div>
+<div>Liu, N. F. et al. (2024). Lost in the Middle. TACL.</div>
+<div>Yao, S. et al. (2023). ReAct. ICLR.</div>
+</div>
+</div>
+</footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#0b5f91","options":["#0b5f91","#1d4ed8","#0f766e","#111827"]},"$preview":{"width":1123,"height":1587}}'>
+class Component extends DCLogic {
+renderVals() {
+return { accent: this.props.accent ?? '#0b5f91' };
+}
+}
+</script>
+</body>
+</html>

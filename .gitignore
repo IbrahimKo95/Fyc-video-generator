@@ -1,0 +1,17 @@
+# Environnement Python
+.venv/
+__pycache__/
+
+# Enregistrements de voix et médias générés (lourds, régénérables avec outils/,
+# et les vidéos du cours doivent être hébergées sur Moodle, pas sur GitHub)
+*.wav
+*.mp4
+*.m4a
+video*/prev_*.jpg
+
+# Fichiers temporaires de LaTeX
+fiche/*.aux
+fiche/*.log
+fiche/*.out
+fiche/*.toc
+fiche/*.synctex.gz

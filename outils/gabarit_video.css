@@ -1,0 +1,81 @@
+/* Gabarit commun des vidéos du cours (1920x1080).
+   Direction (validée par Ibrahim sur visuel_test) : fond sombre, grille qui dérive doucement,
+   halos discrets, plusieurs couleurs mais toujours dans des cadres, Roboto, textes courts.
+   Chaque apparition est calée avec --d (secondes depuis le début de la scène). */
+@font-face{font-family:Roboto;font-weight:300;src:url(../fonts/roboto-latin-300-normal.woff2)}
+@font-face{font-family:Roboto;font-weight:400;src:url(../fonts/roboto-latin-400-normal.woff2)}
+@font-face{font-family:Roboto;font-weight:500;src:url(../fonts/roboto-latin-500-normal.woff2)}
+@font-face{font-family:Roboto;font-weight:700;src:url(../fonts/roboto-latin-700-normal.woff2)}
+@font-face{font-family:Roboto;font-weight:900;src:url(../fonts/roboto-latin-900-normal.woff2)}
+@font-face{font-family:'Roboto Mono';font-weight:400;src:url(../fonts/roboto-mono-latin-400-normal.woff2)}
+@font-face{font-family:'Roboto Mono';font-weight:500;src:url(../fonts/roboto-mono-latin-500-normal.woff2)}
+
+:root{
+  --fond:#0b1020; --carte:#19223d; --carte2:#141b31; --trait:#2a3558;
+  --texte:#eef2f9; --clair:#c3cbe0; --gris:#8b96b0; --sombre:#56617d;
+  --esgi:#0a8bb5;            /* bleu ESGI provisoire */
+  --accent:#46c6ea;          /* cyan */
+  --chaud:#f2a23a; --vert:#4fd1a1; --rouge:#ef6a6a;
+  --accent-pale:#46c6ea22; --chaud-pale:#f2a23a22; --vert-pale:#4fd1a122; --rouge-pale:#ef6a6a22;
+  --doux:cubic-bezier(.2,.8,.2,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1920px;height:1080px;overflow:hidden;background:var(--fond)}
+body{font-family:Roboto,sans-serif;color:var(--texte)}
+
+.scene{position:absolute;inset:0;display:none;overflow:hidden;
+  background:radial-gradient(1200px 700px at 78% 18%,#16264a 0%,transparent 60%),
+             radial-gradient(900px 600px at 10% 95%,#0f2a3a 0%,transparent 60%),var(--fond)}
+.scene.on{display:block}
+/* grille de fond qui dérive pendant toute la scène */
+.scene:before{content:"";position:absolute;inset:-80px;opacity:.35;pointer-events:none;
+  background-image:linear-gradient(var(--trait) 1px,transparent 1px),linear-gradient(90deg,var(--trait) 1px,transparent 1px);
+  background-size:80px 80px;
+  -webkit-mask-image:radial-gradient(ellipse at center,#000 20%,transparent 75%);
+  mask-image:radial-gradient(ellipse at center,#000 20%,transparent 75%);
+  animation:derive var(--len) linear both}
+@keyframes derive{from{transform:translate(0,0)}to{transform:translate(-40px,-24px)}}
+/* fondu d'entrée et de sortie de chaque scène */
+.scene:after{content:"";position:absolute;inset:0;background:var(--fond);pointer-events:none;z-index:50;
+  animation:voile-out .45s var(--doux) both, voile-in .45s calc(var(--len) - .45s) ease-in both}
+@keyframes voile-out{from{opacity:1}to{opacity:0}}
+@keyframes voile-in{from{opacity:0}to{opacity:1}}
+
+/* bandeau et barre de progression (la barre est ajoutée par gabarit_video.js) */
+.bandeau{position:absolute;left:96px;right:96px;top:64px;display:flex;justify-content:space-between;
+  font-size:22px;letter-spacing:.14em;text-transform:uppercase;color:var(--gris);font-weight:500}
+.bandeau b{color:var(--accent);font-weight:700}
+.progression{position:absolute;left:96px;right:96px;bottom:56px;height:4px;background:var(--trait);border-radius:2px;overflow:hidden}
+.progression i{display:block;height:100%;background:linear-gradient(90deg,var(--esgi),var(--accent));transform-origin:left;
+  animation:avance var(--len) linear both}
+@keyframes avance{from{transform:scaleX(var(--p0))}to{transform:scaleX(var(--p1))}}
+
+.titre{position:absolute;left:96px;top:150px;font-size:62px;font-weight:700;letter-spacing:-.01em}
+.titre small{display:block;font-size:24px;font-weight:500;color:var(--accent);letter-spacing:.16em;text-transform:uppercase;margin-bottom:14px}
+
+/* briques d'animation */
+.in{animation:glisse .6s var(--d,0s) var(--doux) both}
+.fi{animation:fondu .5s var(--d,0s) ease both}
+.trace{transform-origin:left;animation:trace .6s var(--d,0s) var(--doux) both}
+.pop{animation:pop .5s var(--d,0s) var(--doux) both}
+@keyframes glisse{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+@keyframes fondu{from{opacity:0}to{opacity:1}}
+@keyframes trace{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes pop{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+@keyframes eteint{to{opacity:.35;filter:grayscale(1)}}
+@keyframes attenue{to{opacity:.4}}
+@keyframes quitte{to{opacity:0;transform:translateY(-14px)}}
+/* .passe : l'élément s'atténue à --e ; .quitte : un bloc entier disparaît à --f */
+.in.passe{animation:glisse .6s var(--d,0s) var(--doux) both, attenue .5s var(--e) ease forwards}
+.quitte{animation:quitte .4s var(--f) ease forwards}
+/* trait qui barre un texte à --b */
+.barre{position:relative;display:inline-block}
+.barre:after{content:"";position:absolute;left:-10px;right:-10px;top:52%;height:6px;background:var(--rouge);border-radius:3px;
+  transform-origin:left;animation:trace .45s var(--b) var(--doux) both}
+.curseur{display:inline-block;width:14px;height:30px;background:var(--accent);vertical-align:-5px;animation:clignote 1s steps(1) infinite}
+@keyframes clignote{50%{opacity:0}}
+
+.carte{background:var(--carte);border:1px solid var(--trait);border-radius:18px}
+.puce{display:inline-block;font-size:20px;letter-spacing:.1em;text-transform:uppercase;padding:7px 14px;border-radius:999px;border:1px solid var(--trait);color:var(--gris)}
+.mono{font-family:'Roboto Mono',monospace}
+.accent{color:var(--accent)} .chaud{color:var(--chaud)} .vert{color:var(--vert)} .rouge{color:var(--rouge)}

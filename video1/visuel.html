@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Vidéo 1 Open Code</title>
+<link rel="stylesheet" href="../outils/gabarit_video.css">
+<style>
+/* Les --d sont les temps des mots prononcés (transcription du montage, voix décalée de 0,5 s).
+   data-sfx : type de bruitage joué au même instant (voir outils/sons.py). */
+
+/* S1 titre */
+#s1 .tag{position:absolute;left:160px;top:250px;font-size:26px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);font-weight:500}
+#s1 h1{position:absolute;left:150px;top:300px;font-size:200px;font-weight:900;letter-spacing:-.04em;line-height:1}
+#s1 .sous{position:absolute;left:160px;top:540px;font-size:44px;font-weight:300;color:var(--clair)}
+#s1 .barre-titre{position:absolute;left:160px;top:640px;width:520px;height:6px;background:linear-gradient(90deg,var(--esgi),var(--accent))}
+#s1 .ep{position:absolute;left:160px;top:690px;font-size:34px;font-weight:500}
+#s1 .ep em{font-style:normal;color:var(--gris);font-weight:400;margin-right:18px}
+#s1 .term{position:absolute;right:150px;top:300px;width:560px;height:250px;border-radius:18px;background:#0a0f1d;border:1px solid var(--trait);
+  box-shadow:0 40px 80px #0008;font-family:'Roboto Mono';font-size:28px;padding:80px 36px 30px;color:var(--gris)}
+#s1 .term:before{content:"";position:absolute;left:24px;top:24px;width:14px;height:14px;border-radius:50%;background:var(--rouge);box-shadow:24px 0 #f2c23a,48px 0 var(--vert)}
+#s1 .term b{color:var(--accent);font-weight:500}
+#s1 .chemin{position:absolute;left:160px;right:150px;top:820px;display:flex;align-items:center;gap:26px}
+#s1 .etape{font-size:32px;font-weight:500;padding:20px 32px;display:flex;align-items:center;gap:16px}
+#s1 .etape .num{font-family:'Roboto Mono';font-size:22px;color:var(--gris)}
+#s1 .etape.fin{border-color:var(--chaud)} #s1 .etape.fin .num{color:var(--chaud)}
+#s1 .fl{width:80px;height:3px;background:var(--trait)}
+
+/* S2 accroche */
+#s2 .lead{position:absolute;left:96px;top:250px;font-size:40px;font-weight:300;color:var(--clair)}
+#s2 .lead b{font-weight:500;color:var(--texte)}
+#s2 .qs{position:absolute;left:96px;right:96px;top:340px;height:300px;padding:48px 56px}
+#s2 .q{font-size:62px;font-weight:700;line-height:1.6}
+#s2 .q2 em{font-style:normal;color:var(--chaud);position:relative}
+#s2 .q2 em:after{content:"";position:absolute;left:0;right:0;bottom:2px;height:8px;background:var(--chaud);opacity:.35;border-radius:4px;transform-origin:left;animation:trace .5s 12.4s var(--doux) both}
+#s2 .but{position:absolute;left:96px;right:96px;top:700px}
+#s2 .but small{display:block;font-size:24px;font-weight:500;color:var(--accent);letter-spacing:.16em;text-transform:uppercase;margin-bottom:22px}
+#s2 .but .ligne{display:flex;gap:32px}
+#s2 .but .carte{flex:1;font-size:34px;padding:30px 36px;display:flex;align-items:center;gap:24px}
+#s2 .but .ico{flex:none;width:56px;height:56px;border-radius:14px;display:grid;place-items:center}
+
+/* S3 frise */
+#s3 .axe{position:absolute;left:150px;right:150px;top:580px;height:4px;background:var(--trait)}
+#s3 .axe i{position:absolute;top:0;bottom:0;background:var(--accent)}
+#s3 .n{position:absolute;top:580px;width:310px;margin-left:-155px;text-align:center}
+#s3 .pt{position:absolute;left:50%;top:-14px;margin-left:-14px;width:28px;height:28px;border-radius:50%;background:var(--fond);border:4px solid var(--accent)}
+#s3 .an{position:absolute;left:0;right:0;bottom:44px;font-size:50px;font-weight:900;color:var(--accent)}
+#s3 .nom{position:absolute;left:0;right:0;top:44px;font-size:31px;font-weight:700}
+#s3 .ds{position:absolute;left:8px;right:8px;top:94px;font-size:24px;line-height:1.35;color:var(--gris)}
+#s3 .verbe{position:absolute;left:0;right:0;top:186px}
+#s3 .n.chaud .pt{border-color:var(--chaud);background:var(--chaud);box-shadow:0 0 0 10px var(--chaud-pale)}
+#s3 .n.chaud .an{color:var(--chaud)}
+#s3 .n.chaud .puce{border-color:var(--chaud);color:var(--chaud)}
+
+/* S4 suggère -> agit */
+#s4 .c{position:absolute;top:310px;width:640px;height:320px;padding:46px}
+#s4 .c1{left:150px}
+#s4 .c2{right:150px;border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),0 30px 80px #46c6ea22}
+#s4 .c small{font-size:24px;font-weight:500;color:var(--gris);letter-spacing:.16em;text-transform:uppercase}
+#s4 .c h3{font-size:84px;font-weight:900;margin:12px 0 16px}
+#s4 .c2 h3{color:var(--accent)}
+#s4 .c p{font-size:30px;line-height:1.4;font-weight:300;color:var(--clair)}
+#s4 .fleche{position:absolute;left:830px;top:465px;width:250px;height:6px;background:var(--chaud)}
+#s4 .fleche:after{content:"";position:absolute;right:-6px;top:-14px;border:17px solid transparent;border-left:26px solid var(--chaud);border-right:0}
+#s4 .metier{position:absolute;left:150px;right:150px;top:720px}
+#s4 .metier small{display:block;font-size:24px;font-weight:500;color:var(--accent);letter-spacing:.16em;text-transform:uppercase;margin-bottom:22px}
+#s4 .metier .ligne{display:flex;gap:24px;align-items:center}
+#s4 .metier .carte{font-size:32px;padding:24px 32px;display:flex;align-items:center;gap:14px}
+#s4 .metier .carte b{font-family:'Roboto Mono';font-size:22px;color:var(--accent)}
+#s4 .metier .non{font-size:32px;color:var(--gris);padding:24px 12px}
+
+/* S5 LLM */
+#s5 .sigle{position:absolute;left:96px;top:300px;font-size:160px;font-weight:900;color:var(--accent);line-height:1}
+#s5 .dev{position:absolute;left:560px;top:312px;font-size:46px;font-weight:500;line-height:1.5}
+#s5 .dev span{color:var(--gris);font-weight:300}
+#s5 .dev u{text-decoration:none;color:var(--chaud)}
+#s5 .schema{position:absolute;left:96px;right:96px;top:610px;display:flex;align-items:center;gap:26px}
+#s5 .schema .carte{font-size:34px;padding:32px 38px}
+#s5 .schema .f{border-color:var(--accent);color:var(--accent);font-weight:700;box-shadow:0 0 0 1px var(--accent)}
+#s5 .schema .sortie{border-color:var(--chaud);color:var(--chaud)}
+#s5 .schema i{width:70px;height:4px;background:var(--trait)}
+#s5 .phrase{position:absolute;left:96px;top:270px;font-size:62px;font-weight:500}
+#s5 .trou{display:inline-block;width:250px;border-bottom:6px solid var(--accent);height:74px;vertical-align:-10px;position:relative}
+#s5 .trou .curseur{position:absolute;left:10px;top:18px;height:46px;width:6px;animation:clignote 1s steps(1) infinite, quitte .1s 28.8s both}
+#s5 .trou b{position:absolute;left:10px;top:-2px;color:var(--chaud)}
+#s5 .barres{position:absolute;left:96px;top:400px;width:1100px;padding:20px 36px}
+#s5 .ligne{display:flex;align-items:center;height:86px;font-size:34px}
+#s5 .ligne .mot{width:230px;font-family:'Roboto Mono';color:var(--clair)}
+#s5 .ligne .tr{width:520px;height:40px;background:#ffffff0d;border-radius:8px;overflow:hidden;margin-right:30px}
+#s5 .ligne .tr i{display:block;height:100%;background:var(--esgi);border-radius:8px}
+#s5 .ligne .lib{color:var(--gris);font-size:28px}
+#s5 .ligne.top .tr i{background:var(--chaud)}
+#s5 .ligne.top .mot{color:var(--chaud);font-weight:500}
+#s5 .note{position:absolute;right:96px;top:420px;width:520px;padding:36px;border-left:6px solid var(--accent);font-size:32px;line-height:1.45}
+#s5 .note b{color:var(--accent)}
+#s5 .note p+p{margin-top:22px}
+
+/* S6 tokens */
+#s6 .mot{position:absolute;left:0;right:0;top:320px;display:flex;justify-content:center;font-size:120px;font-weight:700}
+#s6 .tk{display:inline-block;border:3px solid transparent;border-radius:18px;padding:8px 0;
+  animation:glisse .6s var(--d) var(--doux) both, coupe .7s var(--c) var(--doux) forwards}
+#s6 .tk:nth-child(1){--k:var(--accent)} #s6 .tk:nth-child(2){--k:var(--chaud)} #s6 .tk:nth-child(3){--k:var(--vert)}
+@keyframes coupe{to{border-color:var(--k);padding:8px 28px;margin:0 14px;background:color-mix(in srgb,var(--k) 14%,transparent);color:var(--k)}}
+#s6 .ex{position:absolute;left:0;right:0;top:515px;text-align:center;font-size:20px;color:var(--sombre);letter-spacing:.1em;text-transform:uppercase}
+#s6 .compte{position:absolute;left:96px;right:96px;top:610px;display:flex;gap:36px}
+#s6 .f{flex:1;padding:32px;text-align:center}
+#s6 .f b{display:block;font-size:50px;font-weight:900;color:var(--accent);margin-bottom:8px}
+#s6 .f span{font-size:26px;color:var(--clair)}
+#s6 .f.cout{border-color:var(--chaud)} #s6 .f.cout b{color:var(--chaud)}
+#s6 .moy{position:absolute;left:96px;right:96px;top:860px;text-align:center;font-size:26px;color:var(--gris)}
+
+/* S7 fabrication */
+#s7 .etapes{position:absolute;left:96px;right:96px;top:310px;display:flex;justify-content:space-between}
+#s7 .et{width:520px;height:600px;padding:42px;position:relative}
+#s7 .et .num{font-family:'Roboto Mono';font-size:24px;color:var(--accent);font-weight:500}
+#s7 .et h4{font-size:44px;font-weight:700;margin:12px 0 22px}
+#s7 .et p{font-size:28px;line-height:1.4;color:var(--clair);font-weight:300;margin-bottom:14px}
+#s7 .et p b{color:var(--texte);font-weight:500}
+#s7 .et .res{position:absolute;left:42px;right:42px;bottom:36px;padding-top:20px;border-top:1px solid var(--trait);font-size:26px;color:var(--gris)}
+#s7 .et .res b{color:var(--texte);font-weight:500}
+#s7 .et.der{border-color:var(--chaud)} #s7 .et.der .num{color:var(--chaud)}
+#s7 .lien{position:absolute;top:600px;width:100px;height:4px;background:var(--trait)}
+#s7 .flux{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+#s7 .flux span{font-family:'Roboto Mono';font-size:24px;padding:6px 12px;border-radius:8px;background:var(--chaud-pale);color:var(--chaud)}
+
+/* S8 à retenir */
+#s8 .soustitre{position:absolute;left:96px;top:248px;font-size:30px;color:var(--gris)}
+#s8 ol{position:absolute;left:96px;right:96px;top:320px;list-style:none;display:flex;flex-direction:column;gap:16px}
+#s8 li{display:flex;align-items:center;gap:28px;height:114px;padding:0 36px}
+#s8 li svg{flex:none}
+#s8 li h5{font-size:38px;font-weight:700;width:640px}
+#s8 li p{font-size:28px;color:var(--gris);flex:1}
+#s8 li p b{color:var(--accent);font-weight:500}
+#s8 li.non{border-left:6px solid var(--rouge)}
+#s8 li.att{border-left:6px solid var(--chaud)}
+
+/* S9 conclusion */
+#s9 .gros{position:absolute;left:96px;top:240px;font-size:64px;font-weight:700}
+#s9 .liste{position:absolute;left:96px;top:370px;display:flex;flex-direction:column;gap:18px}
+#s9 .liste div{font-size:34px;padding:20px 30px;display:flex;align-items:center;gap:20px}
+#s9 .liste .x{color:var(--rouge);font-weight:700}
+#s9 .liste b{color:var(--accent);font-weight:500}
+#s9 svg{position:absolute;right:250px;top:200px}
+#s9 .bulle{animation:bulle 2.4s var(--d) ease-in-out infinite}
+@keyframes bulle{0%{transform:translateY(0);opacity:0}20%{opacity:.8}100%{transform:translateY(-120px);opacity:0}}
+#s9 .bocal{position:absolute;right:150px;top:580px;width:520px;text-align:center;font-size:40px;font-weight:700}
+#s9 .bocal span{color:var(--accent)}
+#s9 .suite{position:absolute;left:0;right:0;margin:0 auto;width:fit-content;top:790px;display:flex;align-items:center;gap:26px;padding:24px 44px;border-radius:999px;border:2px solid var(--chaud);background:var(--carte2);white-space:nowrap}
+#s9 .suite small{font-size:22px;letter-spacing:.16em;text-transform:uppercase;color:var(--chaud);font-weight:700}
+#s9 .suite span{font-size:34px;font-weight:500}
+#s9 .suite em{font-style:normal;color:var(--gris);font-size:28px}
+</style>
+</head>
+<body data-lead="0.5">
+
+<!-- S1 : intro -->
+<section class="scene" id="s1" style="--len:17s">
+  <div class="tag fi" style="--d:.3s">FYC · ESGI · 2026-2027</div>
+  <h1 class="in" style="--d:.4s" data-sfx="impact">Open <span class="accent">Code</span></h1>
+  <div class="sous in" style="--d:2.7s">L'alternative open source à Claude Code</div>
+  <div class="barre-titre trace" style="--d:3.5s" data-sfx="trait"></div>
+  <div class="ep in" style="--d:4.2s"><em>Vidéo 1</em>L'IA est devenue incontournable</div>
+  <div class="term in" style="--d:1.2s">
+    <div class="fi" style="--d:1.8s">$ <b>opencode</b><span class="curseur"></span></div>
+  </div>
+  <div class="chemin">
+    <div class="etape carte in" style="--d:12.4s" data-sfx="pop"><span class="num">01</span>La théorie</div>
+    <div class="fl trace" style="--d:13.9s"></div>
+    <div class="etape carte in" style="--d:14.4s" data-sfx="pop"><span class="num">02</span>La pratique</div>
+    <div class="fl trace" style="--d:15.1s"></div>
+    <div class="etape carte fin in" style="--d:15.5s" data-sfx="pop"><span class="num">03</span>Open Code sur un vrai projet</div>
+  </div>
+</section>
+
+<!-- S2 : accroche -->
+<section class="scene" id="s2" style="--len:19.533s">
+  <div class="bandeau fi" style="--d:.2s"><span><b>01</b> · Introduction</span><span>Open Code</span></div>
+  <div class="lead in" style="--d:.6s">Coder avec l'IA, aujourd'hui : <b class="fi" style="--d:3.1s">la façon normale de travailler</b></div>
+  <div class="qs carte in" style="--d:7.6s">
+    <div class="q"><span class="barre" style="--b:9.8s;--d:9.8s" data-sfx="trait"><span class="fi" style="animation:eteint .5s 10.1s ease forwards">« Est-ce qu'on utilise l'IA pour coder ? »</span></span></div>
+    <div class="q q2 in" style="--d:11.6s" data-sfx="carillon">« Est-ce qu'on l'utilise <em>bien</em> ? »</div>
+  </div>
+  <div class="but">
+    <small class="fi" style="--d:13.4s">L'objectif du cours</small>
+    <div class="ligne">
+      <div class="carte in" style="--d:15.3s" data-sfx="pop"><span class="ico" style="background:var(--accent-pale)"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#46c6ea" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6l-6 6 6 6M16 6l6 6-6 6"/></svg></span>Faire tourner un agent sur un vrai projet</div>
+      <div class="carte in" style="--d:17.7s;border-color:var(--chaud)" data-sfx="pop"><span class="ico" style="background:var(--chaud-pale)"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#f2a23a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18v.5"/></svg></span>Savoir où sont les pièges</div>
+    </div>
+  </div>
+</section>
+
+<!-- S3 : frise -->
+<section class="scene" id="s3" style="--len:54.967s">
+  <div class="bandeau fi" style="--d:.2s"><span><b>01</b> · Introduction</span><span>Open Code</span></div>
+  <div class="titre in" style="--d:.6s"><small>Historique</small>Comment on en est arrivés là</div>
+  <div class="axe fi" style="--d:2.4s"><i class="trace" style="left:0px;width:150px;--d:3.50s;background:linear-gradient(90deg,var(--esgi),var(--accent))"></i><i class="trace" style="left:150px;width:330px;--d:11.85s;background:linear-gradient(90deg,var(--accent),var(--accent))"></i><i class="trace" style="left:480px;width:330px;--d:24.00s;background:linear-gradient(90deg,var(--accent),var(--accent))"></i><i class="trace" style="left:810px;width:330px;--d:38.25s;background:linear-gradient(90deg,var(--accent),var(--chaud))"></i><i class="trace" style="left:1140px;width:330px;--d:47.30s;background:linear-gradient(90deg,var(--chaud),var(--chaud))"></i><i class="trace" style="left:1470px;width:150px;--d:53.30s;background:linear-gradient(90deg,var(--chaud),var(--chaud))"></i></div>
+  <div class="n" style="left:300px">
+    <div class="an in" style="--d:4.1s" data-sfx="clic">&lt; 2021</div><div class="pt pop" style="--d:4.1s"></div>
+    <div class="nom in" style="--d:5.5s">Autocomplétion</div>
+    <div class="ds in" style="--d:8.1s">Tabnine, Kite : la fin de la ligne</div>
+    <div class="verbe in" style="--d:9.7s"><span class="puce">complète</span></div>
+  </div>
+  <div class="n" style="left:630px">
+    <div class="an in" style="--d:12.45s" data-sfx="clic">2021</div><div class="pt pop" style="--d:12.45s"></div>
+    <div class="nom in" style="--d:13.6s">GitHub Copilot</div>
+    <div class="ds in" style="--d:17.1s">des fonctions entières, dans l'éditeur</div>
+    <div class="verbe in" style="--d:20.9s"><span class="puce">suggère</span></div>
+  </div>
+  <div class="n" style="left:960px">
+    <div class="an in" style="--d:24.6s" data-sfx="clic">2022</div><div class="pt pop" style="--d:24.6s"></div>
+    <div class="nom in" style="--d:25.5s">ChatGPT</div>
+    <div class="ds in" style="--d:27.2s">une conversation,<br>à coups de copier-coller</div>
+    <div class="verbe in" style="--d:30.5s"><span class="puce">répond</span></div>
+  </div>
+  <div class="n" style="left:1290px">
+    <div class="an in" style="--d:38.85s" data-sfx="clic">2023-24</div><div class="pt pop" style="--d:38.85s"></div>
+    <div class="nom in" style="--d:40.5s">Premiers agents</div>
+    <div class="ds in" style="--d:43.2s">un modèle, des outils<br>et une boucle</div>
+    <div class="verbe in" style="--d:44.6s"><span class="puce">essaie</span></div>
+  </div>
+  <div class="n chaud" style="left:1620px">
+    <div class="an in" style="--d:47.9s" data-sfx="clic">2025</div><div class="pt pop" style="--d:47.9s"></div>
+    <div class="nom in" style="--d:49.3s">Agents grand public</div>
+    <div class="ds in" style="--d:50.6s">Claude Code, Cursor,<br><b class="chaud fi" style="--d:53.9s">Open Code</b></div>
+    <div class="verbe in" style="--d:51.4s"><span class="puce">agit</span></div>
+  </div>
+</section>
+
+<!-- S4 : de l'assistant à l'agent -->
+<section class="scene" id="s4" style="--len:24.933s">
+  <div class="bandeau fi" style="--d:.2s"><span><b>01</b> · Introduction</span><span>Open Code</span></div>
+  <div class="titre in" style="--d:.5s"><small>Le glissement</small>D'un assistant à un agent</div>
+  <div class="c c1 carte in" style="--d:2.6s;animation:glisse .6s 2.6s var(--doux) both,eteint .6s 10.2s ease forwards" data-sfx="pop"><small>Assistant</small><h3>suggère</h3>
+    <p class="fi" style="--d:5.2s">Il propose. Vous copiez, vous lancez, vous testez.</p></div>
+  <div class="fleche trace" style="--d:3.7s" data-sfx="trait"></div>
+  <div class="c c2 carte in" style="--d:4.2s" data-sfx="pop"><small>Agent</small><h3>agit</h3>
+    <p class="fi" style="--d:10.6s">Il lit le projet, modifie, lance les commandes et vérifie lui-même.</p></div>
+  <div class="metier">
+    <small class="fi" style="--d:15.5s">Ce qui compte de plus en plus</small>
+    <div class="ligne">
+      <span class="non fi" style="--d:18.6s"><span class="barre" style="--b:19.1s;--d:19.1s" data-sfx="trait">taper vite</span></span>
+      <div class="carte in" style="--d:19.7s" data-sfx="clic"><b>1</b>cadrer le problème</div>
+      <div class="carte in" style="--d:21.3s" data-sfx="clic"><b>2</b>donner le bon contexte</div>
+      <div class="carte in" style="--d:22.8s;border-color:var(--chaud)" data-sfx="clic"><b class="chaud">3</b>relire le code</div>
+    </div>
+  </div>
+</section>
+
+<!-- S5 : qu'est-ce qu'un LLM -->
+<section class="scene" id="s5" style="--len:39.333s">
+  <div class="bandeau fi" style="--d:.2s"><span><b>02</b> · Qu'est-ce qu'un LLM ?</span><span>Open Code</span></div>
+  <div class="quitte" style="--f:15.2s">
+    <div class="titre in" style="--d:.9s"><small>Ouvrons le capot</small>Au cœur de tous ces outils</div>
+    <div class="sigle in" style="--d:3.8s" data-sfx="impact">LLM</div>
+    <div class="dev"><div class="in" style="--d:4.9s"><u>L</u>arge <u>L</u>anguage <u>M</u>odel</div><div class="in" style="--d:7s"><span>un grand modèle de langage</span></div></div>
+    <div class="schema">
+      <div class="carte in" style="--d:12s">un début de texte</div><i class="trace" style="--d:12.6s"></i>
+      <div class="carte f in" style="--d:11.3s" data-sfx="pop">LLM : une fonction</div><i class="trace" style="--d:13.4s"></i>
+      <div class="carte sortie in" style="--d:13.6s">le morceau qui vient après</div>
+    </div>
+  </div>
+  <div class="phrase in" style="--d:15.9s">Le développeur relance les <span class="trou"><span class="curseur"></span><b class="pop" style="--d:28.8s" data-sfx="carillon">tests</b></span></div>
+  <div class="barres carte in" style="--d:22.2s">
+    <div class="ligne top in" style="--d:24.4s" data-sfx="tic"><span class="mot">tests</span><span class="tr"><i class="trace" style="--d:24.6s;width:85%"></i></span><span class="lib">très probable</span></div>
+    <div class="ligne in" style="--d:26.1s" data-sfx="tic"><span class="mot">commandes</span><span class="tr"><i class="trace" style="--d:26.3s;width:35%"></i></span><span class="lib">un peu moins</span></div>
+    <div class="ligne in" style="--d:27.1s" data-sfx="tic"><span class="mot">dés</span><span class="tr"><i class="trace" style="--d:27.3s;width:4%"></i></span><span class="lib">presque pas</span></div>
+  </div>
+  <div class="note carte in" style="--d:32.4s;left:96px;right:96px;width:auto;top:800px" data-sfx="pop">
+    <p>Une fonction <b>gigantesque</b>, entraînée sur énormément de texte. <span class="fi" style="--d:36.8s">Mais à la base : <b class="chaud">prédire la suite</b>.</span></p>
+  </div>
+</section>
+
+<!-- S6 : tokens -->
+<section class="scene" id="s6" style="--len:26.367s">
+  <div class="bandeau fi" style="--d:.2s"><span><b>02</b> · Qu'est-ce qu'un LLM ?</span><span>Open Code</span></div>
+  <div class="titre in" style="--d:.9s"><small>Tokens</small>Il ne lit pas des mots</div>
+  <div class="mot"><span class="tk" style="--d:6.9s;--c:8.2s">dé</span><span class="tk" style="--d:6.9s;--c:8.4s">velop</span><span class="tk" style="--d:6.9s;--c:8.6s">pement</span></div>
+  <span style="--d:8.2s" data-sfx="pop"></span>
+  <div class="ex fi" style="--d:9s">découpage donné en exemple · 3 ou 4 tokens selon le modèle</div>
+  <div class="compte">
+    <div class="f carte in" style="--d:9.8s" data-sfx="pop"><b>≈ 4 car.</b><span>par token, en anglais</span></div>
+    <div class="f carte in" style="--d:17.6s" data-sfx="pop"><b>entrée</b><span>ce que vous envoyez</span></div>
+    <div class="f carte in" style="--d:18.5s" data-sfx="pop"><b>sortie</b><span>ce qu'il vous répond</span></div>
+    <div class="f carte cout in" style="--d:20.6s" data-sfx="pop"><b>coût</b><span>tout se compte en tokens</span></div>
+  </div>
+  <div class="moy fi" style="--d:22.2s">On y revient avec le prix d'utilisation d'un agent comme Open Code.</div>
+</section>
+
+<!-- S7 : fabrication -->
+<section class="scene" id="s7" style="--len:41.4s">
+  <div class="bandeau fi" style="--d:.2s"><span><b>02</b> · Qu'est-ce qu'un LLM ?</span><span>Open Code</span></div>
+  <div class="titre in" style="--d:.6s"><small>Fabrication</small>Comment on obtient un LLM</div>
+  <div class="etapes">
+    <div class="et carte in" style="--d:3.9s" data-sfx="pop"><div class="num">01</div><h4>Pré-entraînement</h4>
+      <p class="fi" style="--d:6.1s">Du texte en énorme quantité : <b>web, livres, code</b>.</p>
+      <p class="fi" style="--d:9.6s"><b>Des milliers de milliards</b> de tokens.</p>
+      <p class="fi" style="--d:14.3s">Un seul exercice : <b>deviner le token suivant</b>.</p>
+      <div class="res fi" style="--d:16.4s">→ <b>sait beaucoup</b>, ne discute pas</div></div>
+    <div class="et carte in" style="--d:19.5s" data-sfx="pop"><div class="num">02</div><h4>Post-entraînement</h4>
+      <p class="fi" style="--d:21.5s">Des <b>exemples de conversations</b>.</p>
+      <p class="fi" style="--d:23.5s">Un réglage avec des <b>retours humains</b> : <b class="accent fi" style="--d:26.1s">le RLHF</b>.</p>
+      <div class="res fi" style="--d:27.6s">→ <b>suit des instructions</b></div></div>
+    <div class="et carte der in" style="--d:31.4s" data-sfx="pop"><div class="num">03</div><h4>Inférence</h4>
+      <p class="fi" style="--d:32.9s">C'est <b>quand vous l'utilisez</b> : un token, puis le suivant…</p>
+      <div class="flux"><span class="pop" style="--d:34.9s">Le</span><span class="pop" style="--d:35.9s">développeur</span><span class="pop" style="--d:36.6s">relance</span><span class="pop" style="--d:37.3s">les</span><span class="pop" style="--d:37.9s">tests</span></div>
+      <div class="res fi" style="--d:39s">→ <b>la réponse s'écrit petit à petit</b></div></div>
+  </div>
+  <div class="lien trace" style="left:616px;--d:19.2s"></div>
+  <div class="lien trace" style="left:1204px;--d:31.1s"></div>
+</section>
+
+<!-- S8 : à retenir -->
+<section class="scene" id="s8" style="--len:41.233s">
+  <div class="bandeau fi" style="--d:.2s"><span><b>02</b> · Qu'est-ce qu'un LLM ?</span><span>Open Code</span></div>
+  <div class="titre in" style="--d:.5s"><small>À retenir</small>Ses limites, à garder en tête</div>
+  <ol>
+    <li class="carte non in passe" style="--d:6.9s;--e:12.6s" data-sfx="clic"><svg width="40" height="40" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="#ef6a6a" stroke-width="3" stroke-linecap="round"/></svg><h5>Pas une base de données</h5><p class="fi" style="--d:10.5s">il génère la suite la plus probable</p></li>
+    <li class="carte non in passe" style="--d:12.6s;--e:22.7s" data-sfx="clic"><svg width="40" height="40" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="#ef6a6a" stroke-width="3" stroke-linecap="round"/></svg><h5>Pas de mémoire</h5><p class="fi" style="--d:15.9s">il ne sait que ce que vous lui donnez : <b class="fi" style="--d:19.8s">le contexte</b></p></li>
+    <li class="carte att in passe" style="--d:22.7s;--e:31.3s" data-sfx="clic"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#f2a23a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18v.5"/></svg><h5>Il peut halluciner</h5><p class="fi" style="--d:27.6s">une fonction inventée, avec assurance</p></li>
+    <li class="carte att in passe" style="--d:31.3s;--e:35.6s" data-sfx="clic"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#f2a23a" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><h5>Une date de coupure</h5><p class="fi" style="--d:32.9s">rien de ce qui est sorti après</p></li>
+    <li class="carte att in" style="--d:35.6s" data-sfx="clic"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#f2a23a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18"/></svg><h5>Un contexte limité</h5><p class="fi" style="--d:38.7s">une taille maximale à ce qu'on lui envoie</p></li>
+  </ol>
+</section>
+
+<!-- S9 : conclusion -->
+<section class="scene" id="s9" style="--len:19.033s">
+  <div class="bandeau fi" style="--d:.2s"><span><b>02</b> · Conclusion</span><span>Open Code</span></div>
+  <div class="gros in" style="--d:.6s" data-sfx="impact">Un LLM tout seul ne fait rien</div>
+  <div class="liste">
+    <div class="carte in" style="--d:2.7s" data-sfx="clic"><span class="x">✕</span>Il ne lance pas de code.</div>
+    <div class="carte in" style="--d:3.4s" data-sfx="clic"><span class="x">✕</span>Il n'est connecté à rien.</div>
+    <div class="carte in" style="--d:4.3s" data-sfx="clic"><span class="accent">→</span><span>Du texte en entrée, <b>du texte en sortie</b>.</span></div>
+  </div>
+  <svg class="pop" style="--d:6s" data-sfx="pop" width="300" height="340" viewBox="0 0 300 340">
+    <rect x="90" y="18" width="120" height="34" rx="8" fill="#19223d" stroke="#8b96b0" stroke-width="5"/>
+    <path d="M100 52 C 40 70, 36 110, 36 150 L 36 280 Q 36 322 78 322 L 222 322 Q 264 322 264 280 L 264 150 C 264 110, 260 70, 200 52 Z" fill="#46c6ea10" stroke="#8b96b0" stroke-width="5"/>
+    <g fill="none" stroke="#46c6ea" stroke-width="7" stroke-linecap="round">
+      <path d="M150 150 C 120 140, 92 160, 98 190 C 76 200, 80 236, 104 242 C 106 266, 134 272, 150 258"/>
+      <path d="M150 150 C 180 140, 208 160, 202 190 C 224 200, 220 236, 196 242 C 194 266, 166 272, 150 258"/>
+      <path d="M150 150 L 150 258 M 118 196 Q 132 206 128 222 M 182 196 Q 168 206 172 222"/>
+    </g>
+    <circle class="bulle" cx="80" cy="300" r="6" fill="#46c6ea55" style="--d:0s"/>
+    <circle class="bulle" cx="226" cy="306" r="5" fill="#46c6ea55" style="--d:.9s"/>
+    <circle class="bulle" cx="110" cy="310" r="4" fill="#46c6ea55" style="--d:1.6s"/>
+  </svg>
+  <div class="bocal in" style="--d:7.3s">Un <span>cerveau dans un bocal</span></div>
+  <div class="suite in" style="--d:11.9s" data-sfx="carillon"><small>Vidéo 2</small><span>Lui donner un corps : l'agent IA</span><em class="fi" style="--d:13.9s">· des outils et une boucle</em></div>
+</section>
+
+<script src="../outils/gabarit_video.js"></script>
+</body>
+</html>
