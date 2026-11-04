@@ -1,147 +1,158 @@
-# Vidéo 9 : L'interface et les commandes (démo)
+# Vidéo 9 : Installer et configurer Open Code (démo)
 
-Durée visée : 7 min. Vidéo en capture d'écran avec la voix par-dessus. Les lignes en italique décrivent l'écran ou donnent une consigne : elles ne se lisent pas.
-Enregistrer tout, y compris les blocs [+]. Au montage, les blocs [+] sont gardés seulement si la vidéo reste sous 9 min 30.
-Sources : opencode.ai/docs (tui, keybinds, agents, cli), lues le 01/11/2026. Revérifier les commandes et raccourcis la veille du tournage.
+Partie du plan : P5.1 « Installer et configurer Open Code ».
+Bornes : 6:10 – 6:55 (min = quelqu'un de rapide qui lit tout, blocs [+] compris ; max = quelqu'un de posé qui ne lit que le texte principal).
+Les lignes en italique décrivent l'écran ou donnent une consigne : elles ne se lisent pas.
+Enregistrer tout, y compris les blocs [+]. Au montage, les blocs [+] sont gardés un par un tant que la vidéo reste sous sa borne max.
+Sources : opencode.ai/docs (intro, cli, tui, config, providers, mcp-servers, permissions), lues le 01/11/2026.
 
-*Écran sans voix : environ 60 s (commandes tapées, agent qui travaille), accéléré au montage.*
+*Vidéo en capture d'écran, avec la voix par-dessus. Toutes les attentes (téléchargement, installation, agent qui travaille) sont coupées ou accélérées à quelques secondes au montage : la durée de la vidéo, c'est la voix. Les passages qui commentent l'écran sont écrits comme exemple : les adapter à ce qui s'affiche vraiment, en gardant à peu près la même longueur.*
 
-*Avant de tourner : reprendre le projet de démo configuré dans la vidéo 8 (opencode.json, AGENTS.md, dépôt git propre). Faire un commit juste avant, pour pouvoir montrer /undo sans risque.*
+*Avant de tourner :*
+*- Ouvrir opencode.ai/docs la veille et revérifier chaque commande. La doc parle d'Open Code 1 et d'Open Code 2, qui utilisent la même commande « opencode » et ne s'installent pas côte à côte. Ce script suit la page d'installation d'Open Code 1. Si vous filmez Open Code 2, adapter les commandes.*
+*- Sur Windows, la doc recommande WSL : filmer de préférence sous Linux, macOS ou WSL.*
+*- Préparer une clé d'API d'un fournisseur (avec un plafond de dépense réglé), ou Ollama déjà installé avec un modèle téléchargé.*
+*- Préparer le projet de démo (le même que pour les vidéos 10 à 14), déjà initialisé avec git.*
+*- Ne jamais montrer une vraie clé à l'écran : la flouter au montage, puis la révoquer après le tournage.*
 
 ## 1. Intro
 
-*À l'écran : Open Code ouvert dans le projet de démo.*
+*À l'écran : le titre, puis un terminal vide.*
 
-Notre agent est installé et configuré. Maintenant, on va apprendre à s'en servir efficacement. Dans cette vidéo, on fait le tour de l'interface : comment écrire une demande, comment lui montrer des fichiers, comment passer en mode plan, gérer ses sessions, et surtout comment revenir en arrière quand l'agent s'est trompé.
+Après toute cette théorie, on passe à la pratique. Dans cette vidéo, on installe Open Code, on le connecte à un modèle, et on le configure proprement pour un projet. À la fin, vous aurez un agent prêt à travailler, avec des règles de sécurité raisonnables, et Context7 branché. Faites les manipulations en même temps que moi, et mettez la vidéo en pause autant que nécessaire.
 
-## 2. L'écran principal
+## 2. Les prérequis
 
-*À l'écran : on montre successivement le fil de la conversation, la zone de saisie, et les informations en bas de l'écran (modèle, agent actif).*
+*À l'écran : la section « Prerequisites » de la doc officielle, puis une liste de trois points.*
 
-L'écran est assez simple. En haut, le fil de la conversation : vos demandes, les réponses de l'agent, et tout ce qu'il fait entre les deux, les fichiers qu'il lit, les commandes qu'il lance. En bas, la zone où vous écrivez. Et autour, quelques informations utiles : le modèle utilisé, et l'agent actif.
+Avant d'installer, trois choses. D'abord, un terminal récent : l'interface d'Open Code est assez riche, et la documentation recommande des terminaux modernes. Ensuite, si vous êtes sur Windows, la documentation conseille d'utiliser WSL, le sous-système Linux de Windows. Et enfin, il vous faut un modèle : soit une clé d'API chez un fournisseur, soit un modèle local, par exemple avec Ollama.
 
-Pour envoyer une demande, on l'écrit et on appuie sur Entrée. Pour aller à la ligne sans envoyer, c'est Majuscule et Entrée.
+## 3. L'installation
 
-## 3. Désigner des fichiers avec arobase
+*À l'écran : on tape la commande d'installation par script ; l'installation défile en accéléré.*
 
-*À l'écran : on tape « explique-moi @ » puis le début d'un nom de fichier ; la liste de suggestions apparaît ; on choisit le fichier et on envoie.*
+*Commande : curl -fsSL https://opencode.ai/install | bash*
 
-Première chose à connaître : l'arobase. Quand vous tapez arobase dans votre demande, Open Code ouvre une recherche dans les fichiers du projet. Vous tapez quelques lettres, il vous propose les fichiers qui correspondent, et vous choisissez.
+La méthode la plus simple d'après la documentation, c'est le script officiel. On le télécharge avec curl et on l'exécute.
 
-Le contenu du fichier est alors ajouté directement à la conversation. C'est la façon la plus simple de donner le bon contexte à l'agent. Au lieu de le laisser chercher, vous lui dites exactement où regarder. Rappelez-vous la vidéo 4 : un contexte précis, c'est une meilleure réponse, et moins de tokens dépensés.
+Petite remarque au passage : cette commande télécharge un script et l'exécute directement. C'est pratique, mais c'est exactement le genre de commande dont il faut se méfier en général. Ici, on la prend depuis le site officiel, donc on sait d'où elle vient. Mais retenez le réflexe : on ne lance jamais ce genre de commande depuis une source qu'on ne connaît pas. Et encore moins quand c'est un agent qui vous la propose.
 
-## 4. Lancer une commande avec le point d'exclamation
+*À l'écran : la variante npm, puis opencode --version et son résultat.*
 
-*À l'écran : on tape « !git status » ; la sortie apparaît dans la conversation.*
+*Commande : npm install -g opencode-ai*
 
-Deuxième raccourci : le point d'exclamation. Si votre message commence par un point d'exclamation, Open Code ne l'envoie pas au modèle comme une demande. Il l'exécute comme une commande dans le terminal, et il ajoute le résultat à la conversation.
-
-C'est pratique pour montrer quelque chose à l'agent. Par exemple, vous lancez les tests vous-même, et le résultat est là, dans le contexte, pour la demande suivante.
-
-## 5. Les commandes avec barre oblique
-
-*À l'écran : on tape « / » ; la liste des commandes s'affiche. Puis on montre ctrl+p.*
-
-Ensuite, il y a les commandes qui commencent par une barre oblique. Si vous tapez juste la barre oblique, Open Code vous affiche la liste. Et vous pouvez aussi ouvrir la liste de toutes les commandes avec Contrôle et P.
-
-On en a déjà vu trois dans la vidéo précédente : connect, pour ajouter un fournisseur, models, pour choisir le modèle, et init, pour créer le fichier AGENTS.md.
-
-Voici les autres qui vous serviront tous les jours.
-
-*À l'écran : chaque commande est tapée ou affichée au moment où on en parle.*
-
-new, pour démarrer une nouvelle session. À utiliser dès que vous changez de sujet, pour repartir avec un contexte propre.
-
-sessions, pour retrouver vos anciennes sessions et en reprendre une. Open Code les garde, vous pouvez donc reprendre un travail le lendemain là où vous l'aviez laissé.
-
-compact, pour résumer la session en cours quand elle devient trop longue. C'est la compaction dont on a parlé dans la vidéo 3.
-
-export, pour exporter la conversation au format Markdown. Utile pour garder une trace, ou pour montrer à quelqu'un comment vous avez obtenu un résultat.
-
-Et help, si vous avez un doute, pour afficher l'aide.
+Si vous préférez npm, le paquet s'appelle opencode tiret ai, et on l'installe en global. Une fois installé, on vérifie que la commande répond, en demandant la version.
 
 *[+] Bloc optionnel*
 
-Il y en a quelques autres, plus secondaires. themes, pour changer l'apparence. editor, pour écrire une longue demande dans votre éditeur de texte habituel au lieu de la petite zone de saisie. details, pour afficher ou masquer le détail de ce que font les outils. Et thinking, pour afficher ou masquer le raisonnement du modèle, quand il en produit un. Ça ne change pas la façon dont le modèle réfléchit, seulement ce que vous voyez à l'écran.
+La documentation liste aussi d'autres méthodes : Homebrew sur macOS et Linux, des gestionnaires de paquets sous Windows, ou une image Docker. Et un point à savoir : elle mentionne deux versions majeures, Open Code 1 et Open Code 2. Elles utilisent la même commande, et on ne peut pas avoir les deux installées en même temps avec leur nom par défaut. L'important, c'est de lire la documentation qui correspond à la version que vous avez. Les principes restent les mêmes, mais certaines commandes peuvent changer.
 
 *[fin du bloc]*
 
-## 6. Les deux agents : Build et Plan
+## 4. Premier lancement et connexion d'un fournisseur
 
-*À l'écran : on appuie sur Tabulation ; l'indicateur d'agent change en bas à droite. On le refait pour revenir.*
+*À l'écran : cd dans le projet de démo, puis « opencode ». L'interface s'ouvre.*
 
-Un des réglages les plus importants se fait avec une seule touche : Tabulation. Elle permet de passer d'un agent à l'autre.
+On se place dans le dossier d'un projet, parce qu'Open Code travaille toujours sur le dossier dans lequel on le lance. Et on tape simplement : opencode. Voilà l'interface. On la détaillera dans la prochaine vidéo. Pour l'instant, il manque l'essentiel : un modèle.
 
-Par défaut, vous êtes sur l'agent Build. Il a accès à tous les outils : il lit, il modifie, il lance des commandes. C'est lui qui fait le travail.
+*À l'écran : on tape /connect, la liste des fournisseurs s'affiche, on en choisit un, on colle la clé (floutée).*
 
-Quand vous appuyez sur Tabulation, vous passez sur l'agent Plan. Celui-là ne peut pas modifier vos fichiers. Il peut lire le projet, réfléchir, et vous proposer un plan. C'est idéal pour comprendre un projet, ou pour discuter d'une solution avant de la lancer. Et on verra dans les cas pratiques que c'est souvent une très bonne idée de commencer par lui.
+Pour connecter un fournisseur, on tape barre oblique connect. Open Code affiche la liste des fournisseurs. On choisit le sien, et on colle la clé d'API. On peut faire la même chose depuis le terminal avec opencode auth login, et opencode auth list affiche les fournisseurs déjà connectés.
 
-Un indicateur, en bas à droite, vous dit toujours quel agent est actif. Prenez l'habitude de le regarder avant d'envoyer une demande.
+*À l'écran : le chemin du fichier où sont rangées les clés.*
+
+Les clés sont rangées dans un fichier de votre dossier utilisateur, en dehors du projet. Et c'est voulu. Une clé d'API, c'est de l'argent : quelqu'un qui la récupère consomme sur votre compte. Elle ne doit jamais se retrouver dans le dépôt git, ni dans une capture d'écran. Open Code sait aussi lire les clés depuis les variables d'environnement, ou depuis un fichier .env dans le projet. Si vous faites ça, vérifiez bien que ce fichier .env est dans votre .gitignore. Sinon, votre clé partira avec le prochain commit.
 
 *[+] Bloc optionnel*
 
-Il existe aussi des sous-agents, qu'on appelle avec l'arobase suivie de leur nom. Open Code en fournit deux : general, pour des recherches et des tâches en plusieurs étapes, et explore, un agent rapide en lecture seule pour fouiller le code. L'agent principal peut aussi les lancer de lui-même pour se répartir le travail. Et vous pouvez créer vos propres agents, avec leurs instructions, leur modèle et leurs permissions. Par exemple un agent dédié à la relecture de code, qui n'a le droit de rien modifier.
+Et un réflexe à prendre dès maintenant : allez dans le tableau de bord de votre fournisseur et fixez une limite de dépense. La plupart des fournisseurs le proposent. Si un agent part en boucle, ou si votre clé fuite malgré tout, la facture ne pourra pas dépasser un montant que vous avez choisi. Ça prend deux minutes.
 
 *[fin du bloc]*
+
+## 5. Choisir un modèle
+
+*À l'écran : /models, la liste des modèles, on en sélectionne un. Son nom apparaît dans la barre d'état.*
+
+Une fois le fournisseur connecté, on choisit le modèle avec barre oblique models. La liste affiche tous les modèles disponibles chez les fournisseurs connectés. On en sélectionne un, et on peut en changer à tout moment, même au milieu d'une session.
+
+## 6. Le fichier de configuration
+
+*À l'écran : on crée opencode.json à la racine du projet, et on le remplit au fur et à mesure.*
+
+Maintenant, on configure le projet, dans un fichier opencode.json, à la racine.
+
+*À l'écran : la ligne $schema, puis la clé « model ».*
+
+On commence par une ligne qui indique le schéma officiel. Elle permet à votre éditeur de proposer l'autocomplétion et de signaler les erreurs. On peut ensuite fixer le modèle par défaut du projet, avec le nom du fournisseur, une barre oblique, et le nom du modèle. La commande opencode models, dans le terminal, liste les noms exacts.
+
+*À l'écran : le bloc « permission » avec bash et edit sur « ask ».*
+
+Ensuite, le plus important : les permissions. Par défaut, Open Code autorise la plupart des actions sans rien demander, y compris lancer des commandes. Pour un premier projet, je vous conseille de passer les commandes et les modifications de fichiers en mode « ask ». L'agent devra vous demander avant chaque commande et chaque modification. C'est un peu plus lent, mais vous voyez tout ce qu'il fait. Et c'est la meilleure façon d'apprendre comment il travaille : quelles commandes il lance, dans quel ordre, et pourquoi. Au bout de quelques sessions, vous saurez ce qui est normal, et donc repérer ce qui ne l'est pas. Une fois à l'aise, vous pourrez assouplir, par exemple en autorisant les commandes git tout en refusant les suppressions.
+
+*À l'écran : le bloc « mcp » avec context7, type remote, et son adresse.*
+
+Et enfin, on branche Context7, le serveur MCP de la vidéo 6. Un bloc mcp, avec un nom, le type « remote » parce que le serveur est distant, et son adresse. On enregistre, et on relance Open Code pour qu'il prenne en compte la configuration.
 
 *[+] Bloc optionnel*
 
-Un conseil pour choisir entre les deux. Si vous hésitez sur ce que vous voulez, ou si la tâche touche plusieurs fichiers, commencez toujours en Plan. Discutez, faites préciser, faites corriger le plan. Puis passez en Build et demandez simplement d'appliquer ce plan. L'agent garde toute la conversation, donc il sait exactement ce qui a été décidé. À l'inverse, pour une petite modification bien définie, comme renommer une variable dans un fichier, vous pouvez aller directement en Build. Le mode Plan ne sert à rien si vous savez déjà précisément ce que vous voulez.
+*À l'écran : le chemin du fichier de configuration global, dans le dossier utilisateur.*
+
+Ce fichier est propre au projet. Mais il existe aussi un fichier global, dans votre dossier utilisateur, qui s'applique à tous vos projets. Les deux se combinent, et celui du projet l'emporte en cas de conflit. En pratique, on met dans le global ce qui nous concerne nous, comme notre modèle préféré. Et dans le projet, ce qui concerne toute l'équipe, comme les serveurs MCP utiles. Ce fichier de projet peut être partagé dans git, puisqu'il ne contient aucune clé.
 
 *[fin du bloc]*
 
-## 7. Les demandes d'autorisation
+## 7. Le fichier AGENTS.md avec /init
 
-*À l'écran : avec l'agent Build, on demande « lance les tests ». Open Code affiche une demande d'autorisation pour la commande. On la lit, puis on accepte. Montrer aussi une modification de fichier avec son aperçu, et un refus.*
+*À l'écran : on tape /init. L'agent explore le projet, en accéléré. Puis on ouvre le fichier AGENTS.md généré.*
 
-Dans la vidéo précédente, on a réglé les permissions pour que l'agent demande avant de lancer une commande ou de modifier un fichier. Voyons à quoi ça ressemble.
+Dernière étape : la mémoire du projet. On tape barre oblique init.
 
-Je lui demande de lancer les tests. Au lieu de le faire directement, Open Code m'affiche la commande exacte qu'il veut exécuter, et attend ma réponse. Je la lis, c'est bien la commande de test du projet, j'accepte.
+*Commentaire d'exemple, à adapter à ce que l'agent fait vraiment :*
 
-Pour une modification de fichier, c'est pareil. L'agent me montre ce qu'il veut changer, et je décide. Si je refuse, il ne touche à rien, et je peux lui expliquer pourquoi, pour qu'il propose autre chose.
+Vous le voyez parcourir le projet : il ouvre le package.json pour trouver les commandes, il regarde comment les dossiers sont organisés, il jette un œil aux tests.
 
-Ces demandes peuvent paraître pénibles au début. Mais c'est le meilleur moyen de voir comment l'agent travaille, et de repérer tout de suite une commande qui n'a rien à faire là. Lisez-les vraiment. Une demande d'autorisation qu'on valide sans la lire ne protège de rien.
-
-## 8. Interrompre et revenir en arrière
-
-*À l'écran : on lance une demande, on appuie sur Échap pendant que l'agent travaille. Puis on fait une modification avec l'agent Build, et on tape /undo : le fichier revient à son état d'avant.*
-
-Deux réflexes indispensables maintenant.
-
-Le premier : Échap. Si l'agent part dans une mauvaise direction pendant qu'il travaille, vous appuyez sur Échap, et il s'arrête. Vous pouvez ensuite lui donner une précision, et repartir.
-
-Le deuxième : la commande undo. Elle annule votre dernière demande. Elle retire le message, les réponses qui ont suivi, et surtout, elle annule les modifications de fichiers que l'agent a faites. Et si vous avez annulé trop vite, la commande redo remet tout en place.
-
-*Montrer le fichier avant, après la modification de l'agent, puis après /undo.*
-
-Attention à une condition : pour annuler les modifications de fichiers, Open Code s'appuie sur git. Votre projet doit donc être un dépôt git. Encore une raison de toujours travailler avec git quand on utilise un agent.
-
-## 9. Les raccourcis clavier
-
-*À l'écran : ctrl+x puis n (nouvelle session), ctrl+x puis l (liste des sessions), ctrl+x puis m (modèles).*
-
-La plupart de ces commandes ont aussi un raccourci clavier. Open Code utilise ce qu'on appelle une touche leader : par défaut, c'est Contrôle et X. On appuie dessus, puis sur une lettre. Contrôle X puis N, pour une nouvelle session. Contrôle X puis L, pour la liste des sessions. Contrôle X puis M, pour les modèles. Contrôle X puis U, pour annuler.
-
-Tout ça se personnalise, ainsi que le thème, dans un fichier de configuration à part, réservé à l'interface. La liste complète des raccourcis est dans la documentation.
-
-## 10. Utiliser Open Code sans l'interface
-
-*À l'écran : dans un terminal, opencode run avec une demande courte ; la réponse s'affiche et la commande se termine.*
-
-Pour finir, on peut aussi se servir d'Open Code sans ouvrir l'interface. La commande opencode run prend une demande en paramètre, fait le travail, et rend la main. C'est pratique dans un script, ou pour une question rapide.
-
-Et on retrouve l'architecture client et serveur dont on a parlé dans la vidéo 7. La commande opencode serve lance l'agent comme un serveur, sans interface. opencode web ouvre une interface dans le navigateur. Et opencode attach permet de brancher un terminal sur un serveur qui tourne déjà.
+L'agent crée un fichier AGENTS.md à la racine. On y trouve en général une description du projet, les commandes pour l'installer et lancer les tests, et les conventions qu'il a repérées. Ce fichier, relisez-le. L'agent a pu se tromper ou rater une information. Corrigez, et ajoutez ce qu'il ne pouvait pas deviner : les pièges du projet, ce qu'il ne faut jamais toucher. Puis, comme le conseille la documentation, ajoutez-le au dépôt git.
 
 *[+] Bloc optionnel*
 
-Il y a aussi une commande pratique pour garder un œil sur vos dépenses : opencode stats, qui affiche des statistiques sur votre utilisation. Et opencode models, qu'on a déjà vue, liste tous les modèles disponibles chez vos fournisseurs. Prenez l'habitude de regarder vos statistiques de temps en temps, surtout au début : c'est le meilleur moyen de comprendre combien vous coûte réellement votre façon de travailler avec un agent.
+Un bon AGENTS.md n'a pas besoin d'être long. Quelques lignes suffisent : comment installer le projet, comment lancer les tests, les conventions de nommage, l'organisation des dossiers, et les pièges connus. Par exemple : « ne jamais modifier le dossier des migrations à la main ». En gros, tout ce que vous diriez à un nouveau développeur le premier jour. Comme ce fichier est relu à chaque session, l'agent part toujours avec ces informations.
 
 *[fin du bloc]*
 
-## 11. Conclusion et transition
+## 8. Un premier test
 
-*À l'écran : un mémo récapitulatif à l'écran, à mettre en pause.*
+*À l'écran : on passe en mode Plan avec Tabulation, puis on tape la demande. La réponse s'affiche.*
 
-Récapitulons les réflexes. Arobase pour désigner un fichier. Point d'exclamation pour lancer une commande. Barre oblique pour les commandes, avec new dès qu'on change de sujet. Tabulation pour passer en mode Plan. Échap pour interrompre. Et undo pour revenir en arrière, à condition d'être dans un dépôt git.
+On vérifie que tout fonctionne avec une demande sans risque. Je passe en mode Plan avec la touche Tabulation, pour que l'agent ne modifie rien, et je demande : « en trois phrases, à quoi sert ce projet, et comment on lance les tests ? »
 
-Avec ça, vous avez tout ce qu'il faut pour travailler. Dans la prochaine vidéo, on passe au cas pratique : on prend un projet qu'on ne connaît pas, on le fait expliquer par l'agent, puis on lui fait ajouter une vraie fonctionnalité.
+*Commentaire d'exemple, à adapter à la réponse réelle :*
+
+La réponse est juste, et on reconnaît la commande de test qu'il a notée dans AGENTS.md. Le fournisseur est connecté, le modèle répond, et l'agent arrive à lire le projet.
+
+Si vous avez une erreur à ce stade, c'est presque toujours un problème de clé ou de nom de modèle. Revérifiez avec opencode auth list et opencode models.
+
+*[+] Bloc optionnel*
+
+Pour tester Context7, posez une question sur une bibliothèque du projet, en ajoutant « use context7 » à la fin. Si tout est bien branché, vous verrez passer un appel vers Context7 dans le fil de la conversation, avant la réponse.
+
+*[fin du bloc]*
+
+## 9. Variante : un modèle local avec Ollama
+
+*À l'écran : un bloc « provider » pour Ollama dans opencode.json, avec l'adresse locale. Vérifier l'exemple exact dans la doc, page Providers, section Ollama.*
+
+Si vous préférez ne rien envoyer à l'extérieur, vous pouvez utiliser un modèle local. Avec Ollama installé et un modèle téléchargé, on ajoute dans la configuration un fournisseur qui pointe vers l'adresse locale d'Ollama. Gardez en tête qu'un modèle local est souvent moins à l'aise pour enchaîner des actions. La documentation précise d'ailleurs que si les appels d'outils échouent avec Ollama, il faut augmenter la taille de contexte du modèle.
+
+*[+] Bloc optionnel*
+
+Pour savoir si votre machine peut suivre, testez sur une petite tâche avant de vous lancer sur un vrai projet. Demandez par exemple à l'agent d'expliquer un seul fichier, puis de faire une petite modification. Si chaque réponse prend plusieurs minutes, ou si l'agent n'arrive pas à utiliser ses outils correctement, passez par un fournisseur dans le cloud pour les tâches lourdes, et gardez le modèle local pour les questions simples.
+
+*[fin du bloc]*
+
+## 10. Conclusion et transition
+
+*À l'écran : le projet avec ses deux nouveaux fichiers : opencode.json et AGENTS.md.*
+
+Récapitulons. On a installé Open Code, connecté un fournisseur, choisi un modèle, et créé une configuration de projet avec des permissions prudentes et Context7 branché. Et on a généré un fichier AGENTS.md, qu'on a relu et ajouté au dépôt.
+
+Dans la prochaine vidéo, on fait le tour de l'interface : écrire une demande, désigner des fichiers, passer en mode plan, gérer ses sessions, et revenir en arrière quand l'agent s'est trompé.

@@ -1,156 +1,147 @@
-# Vidéo 10 : Cas pratique 1, comprendre un projet et ajouter une fonctionnalité (démo)
+# Vidéo 10 : Découvrir l'interface et les fonctionnalités (démo)
 
-Durée visée : 10 min (dont environ 1 min 30 d'écran où l'agent travaille, accéléré au montage). Les lignes en italique décrivent l'écran ou donnent une consigne : elles ne se lisent pas.
-Enregistrer tout, y compris les blocs [+]. Au montage, les blocs [+] sont gardés seulement si la vidéo reste sous 9 min 30 de voix.
+Partie du plan : P5.2 « Découvrir l'interface et les fonctionnalités ».
+Bornes : 6:10 – 6:55 (min = quelqu'un de rapide qui lit tout, blocs [+] compris ; max = quelqu'un de posé qui ne lit que le texte principal).
+Les lignes en italique décrivent l'écran ou donnent une consigne : elles ne se lisent pas.
+Enregistrer tout, y compris les blocs [+]. Au montage, les blocs [+] sont gardés un par un tant que la vidéo reste sous sa borne max.
+Sources : opencode.ai/docs (tui, keybinds, agents, cli), lues le 01/11/2026. Revérifier les commandes et raccourcis la veille du tournage (les lettres après ctrl+x sont à confirmer dans la page keybinds).
 
-*Écran sans voix : environ 60 s (agent qui travaille, accéléré au montage).*
+*Vidéo en capture d'écran, avec la voix par-dessus. Les attentes (agent qui travaille, commandes qui tournent) sont coupées ou accélérées à quelques secondes au montage : la durée de la vidéo, c'est la voix.*
 
-*Préparation (à faire avant le tournage) :*
-*- Projet de démo proposé, à valider par le groupe : une petite API Node.js/Express qui gère des articles (route GET /articles qui renvoie toute la liste), avec quelques tests automatisés. Taille modeste, que tout le monde comprend.*
-*- Le même projet sert aux vidéos 8, 9 et 11. Dépôt git propre, avec un commit avant chaque partie pour pouvoir rejouer la démo.*
-*- Tester les demandes la veille avec le modèle choisi. L'agent ne fait jamais exactement deux fois la même chose : garder la meilleure prise.*
-*- Pendant le tournage, ne pas lire mot pour mot les passages qui commentent l'écran : décrire ce que l'agent fait vraiment. Les passages en italique « Commenter… » indiquent où et combien de temps.*
+*Avant de tourner : reprendre le projet de démo configuré dans la vidéo 9 (opencode.json, AGENTS.md, dépôt git propre). Faire un commit juste avant, pour pouvoir montrer /undo sans risque.*
 
 ## 1. Intro
 
-*À l'écran : le dossier du projet de démo dans le terminal.*
+*À l'écran : Open Code ouvert dans le projet de démo.*
 
-On passe au premier cas pratique. Le scénario est simple, et vous le vivrez forcément en entreprise : vous arrivez sur un projet que vous ne connaissez pas, et on vous demande d'y ajouter une fonctionnalité.
+Notre agent est installé et configuré. Maintenant, on va apprendre à s'en servir efficacement. Dans cette vidéo, on fait le tour de l'interface : comment écrire une demande, comment lui montrer des fichiers, comment passer en mode plan, gérer ses sessions, et surtout comment revenir en arrière quand l'agent s'est trompé.
 
-On va le faire en deux temps. D'abord, on va demander à l'agent de nous expliquer le projet, sans rien toucher. Ensuite, on lui fera ajouter la fonctionnalité, en commençant par un plan qu'on validera avant qu'il écrive la moindre ligne.
+## 2. L'écran principal
 
-Le projet, c'est une petite API qui gère des articles. Et la fonctionnalité qu'on va ajouter, c'est celle dont on parlait dans la vidéo 2 : la pagination sur la liste des articles.
+*À l'écran : on montre successivement le fil de la conversation, la zone de saisie, et les informations en bas de l'écran (modèle, agent actif).*
 
-## 2. Partie 1 : comprendre le projet
+L'écran est assez simple. En haut, le fil de la conversation : vos demandes, les réponses de l'agent, et tout ce qu'il fait entre les deux, les fichiers qu'il lit, les commandes qu'il lance. En bas, la zone où vous écrivez. Et autour, quelques informations utiles : le modèle utilisé, et l'agent actif.
 
-*À l'écran : on lance opencode, on passe en mode Plan avec Tabulation, l'indicateur change.*
+Pour envoyer une demande, on l'écrit et on appuie sur Entrée.
 
-On lance Open Code dans le dossier du projet. Et avant d'écrire quoi que ce soit, je passe en mode Plan avec la touche Tabulation. On veut seulement comprendre, donc l'agent n'a aucune raison de modifier un fichier. En mode Plan, on est tranquille.
+## 3. Désigner des fichiers avec arobase
 
-*À l'écran : on tape la demande, puis on l'envoie.*
+*À l'écran : on tape « explique-moi @ » puis le début d'un nom de fichier ; la liste de suggestions apparaît ; on choisit le fichier et on envoie.*
 
-Je lui demande : « Explique-moi l'architecture de ce projet : les dossiers principaux, le chemin d'une requête HTTP depuis son arrivée jusqu'à la réponse, et par où commencer pour ajouter une fonctionnalité. »
+Première chose à connaître : l'arobase. Quand vous tapez arobase dans votre demande, Open Code ouvre une recherche dans les fichiers du projet. Vous tapez quelques lettres, il vous propose les fichiers qui correspondent, et vous choisissez.
 
-*À l'écran : l'agent travaille. Accélérer au montage, mais laisser voir les fichiers qu'il ouvre.*
+Le contenu du fichier est alors ajouté directement à la conversation. C'est la façon la plus simple de donner le bon contexte à l'agent. Au lieu de le laisser chercher, vous lui dites exactement où regarder. Rappelez-vous la vidéo 5 : un contexte précis, c'est une meilleure réponse, et moins de tokens dépensés.
 
-Regardez ce qu'il fait pendant qu'il travaille. Il ne répond pas tout de suite. Il explore.
+## 4. Lancer une commande avec le point d'exclamation
 
-*Commenter ce que l'agent fait réellement : quels fichiers il ouvre en premier (souvent le package.json, puis le point d'entrée), s'il fait des recherches dans le code, s'il suit les imports. Prévoir environ 30 secondes.*
+*À l'écran : on tape « !git status » ; la sortie apparaît dans la conversation.*
 
-C'est exactement la démarche qu'aurait un développeur expérimenté le premier jour sur un projet : regarder les dépendances, trouver le point d'entrée, suivre le chemin du code. Sauf qu'ici, ça prend une minute.
+Deuxième raccourci : le point d'exclamation. Si votre message commence par un point d'exclamation, Open Code ne l'envoie pas au modèle comme une demande. Il l'exécute comme une commande dans le terminal, et il ajoute le résultat à la conversation.
 
-## 3. Lire la réponse, et la vérifier
+C'est pratique pour montrer quelque chose à l'agent. Par exemple, vous lancez les tests vous-même, et le résultat est là, dans le contexte, pour la demande suivante.
 
-*À l'écran : la réponse de l'agent. Faire défiler lentement.*
+## 5. Les commandes avec barre oblique
 
-Voici sa réponse.
+*À l'écran : on tape « / » ; la liste des commandes s'affiche. Puis on montre ctrl+p.*
 
-*Commenter la réponse réelle : les dossiers qu'il décrit, le chemin d'une requête. Prévoir environ 30 secondes.*
+Ensuite, il y a les commandes qui commencent par une barre oblique. Si vous tapez juste la barre oblique, Open Code vous affiche la liste. Et vous pouvez aussi ouvrir la liste de toutes les commandes avec Contrôle et P.
 
-C'est clair, et c'est un très bon point de départ. Mais attention, on a dit dans la vidéo 1 qu'un LLM produit du texte qui a l'air juste, pas du texte vérifié. Une explication de projet, c'est pareil. L'agent peut décrire avec assurance un fonctionnement qui n'est pas tout à fait celui du code.
+On en a déjà vu trois dans la vidéo précédente : connect, pour ajouter un fournisseur, models, pour choisir le modèle, et init, pour créer le fichier AGENTS.md.
 
-*À l'écran : on ouvre dans l'éditeur un des fichiers cités par l'agent, et on vérifie une de ses affirmations.*
+Voici les autres qui vous serviront tous les jours.
 
-Donc on vérifie. Je prends une de ses affirmations, et j'ouvre le fichier qu'il cite pour voir si c'est vrai.
+*À l'écran : chaque commande est tapée ou affichée au moment où on en parle.*
 
-*Dire ce qu'on constate réellement : l'affirmation est juste, ou il y a une approximation. Si l'agent s'est trompé, c'est un excellent moment à garder : le montrer clairement.*
+new, pour démarrer une nouvelle session. À utiliser dès que vous changez de sujet, pour repartir avec un contexte propre.
 
-Prenez cette habitude : ouvrir un ou deux fichiers cités pour contrôler. Ça prend trente secondes, et ça vous évite de construire sur une base fausse.
+sessions, pour retrouver vos anciennes sessions et en reprendre une. Open Code les garde, vous pouvez donc reprendre un travail le lendemain là où vous l'aviez laissé.
 
-*À l'écran : une question de suivi.*
+compact, pour résumer la session en cours quand elle devient trop longue. C'est la compaction dont on a parlé dans la vidéo 4.
 
-On peut ensuite poser des questions plus ciblées. Par exemple : « où sont lus les articles depuis la base de données ? » L'agent garde le contexte de la conversation, donc il repart de ce qu'il a déjà exploré.
-
-*[+] Bloc optionnel*
-
-Remarquez qu'à aucun moment on n'a modifié quoi que ce soit. Rien à annuler, rien à valider. Cette première étape d'exploration est sans risque, et elle est très rentable. Même quand vous comptez faire la modification vous-même à la main, demander d'abord à l'agent de vous expliquer le code est souvent un gain de temps énorme. C'est d'ailleurs une des utilisations les plus sous-estimées des agents : pas pour écrire du code, mais pour comprendre celui des autres.
-
-*[fin du bloc]*
-
-## 4. Partie 2 : ajouter la pagination, d'abord un plan
-
-*À l'écran : on reste en mode Plan. On tape la demande.*
-
-Passons à la fonctionnalité. Et on reste en mode Plan pour l'instant. Je lui demande :
-
-« Planifie l'ajout de la pagination sur la route GET /articles, avec deux paramètres dans l'URL : page et limit. Indique les fichiers à modifier et les tests à ajouter. Ne code rien pour l'instant. »
-
-Vous remarquez que la demande est précise. Les noms des paramètres, la route concernée, et ce que j'attends : un plan, avec les fichiers et les tests. C'est ce qu'on a vu dans la vidéo 4 : plus la demande est précise, moins l'agent doit deviner.
-
-*À l'écran : l'agent explore puis présente son plan. Accélérer l'attente.*
-
-*Lire ou résumer le plan réel de l'agent. Prévoir environ 30 secondes.*
-
-## 5. Corriger le plan avant le code
-
-*À l'écran : on écrit une correction au plan, par exemple sur le format de réponse ou les valeurs par défaut.*
-
-Et c'est maintenant qu'on a le plus de pouvoir. Le plan, c'est le moment le moins cher pour corriger le tir. Aucune ligne de code n'a été écrite, donc changer d'avis ne coûte rien.
-
-*Choisir une vraie correction selon le plan obtenu. Exemples possibles : demander une valeur par défaut pour limit, ou une limite maximale, ou que la réponse contienne aussi le nombre total d'articles, ou que la page 0 et les valeurs négatives soient refusées.*
-
-Par exemple ici, je lui demande d'ajouter une valeur par défaut, et de refuser les valeurs absurdes, comme une page négative. Il met son plan à jour.
-
-Imaginez la même correction après coup, une fois le code écrit : il aurait fallu tout reprendre. Prenez l'habitude de ce va-et-vient sur le plan. C'est là que votre expérience de développeur compte le plus.
-
-## 6. Passer en mode Build
-
-*À l'écran : on appuie sur Tabulation pour passer en Build, et on demande d'appliquer le plan. Les demandes d'autorisation apparaissent ; on les lit et on accepte.*
-
-Le plan me convient. Je repasse sur l'agent Build avec Tabulation, et je lui dis simplement : « applique ce plan ».
-
-*À l'écran : l'agent modifie les fichiers et lance les tests. Accélérer, mais montrer chaque demande d'autorisation.*
-
-Comme on a réglé les permissions sur « demander », il me montre chaque modification avant de la faire. Je les lis au fur et à mesure.
-
-*Commenter ce que l'agent fait réellement : quels fichiers il modifie, s'il lance les tests, si un test échoue et qu'il corrige. Prévoir environ 30 secondes.*
-
-Et s'il y a un test qui échoue, vous voyez la boucle de la vidéo 3 en action : il lit l'erreur, il corrige, il relance.
-
-## 7. Relire le résultat
-
-*À l'écran : dans un terminal à côté, git diff ; on fait défiler les changements.*
-
-L'agent a terminé. Mais nous, on n'a pas terminé. Maintenant, on relit. Et pour ça, rien de mieux que git : la commande git diff me montre toutes les lignes qui ont changé dans le projet.
-
-*Relire réellement le diff à voix haute, en survolant : ce qui a été ajouté dans la route, dans l'accès aux données, dans les tests.*
-
-Relire le code de l'agent, ce n'est pas une option. C'est votre travail. Vous êtes responsable de ce code, exactement comme si vous l'aviez écrit. Il y a d'ailleurs un piège connu : on a tendance à relire le code généré plus vite et moins attentivement que celui d'un collègue, parce qu'il a l'air propre. Restez discipliné.
-
-*À l'écran : on lance les tests soi-même, puis on fait un appel à l'API avec page=2.*
-
-Je relance les tests moi-même, et je fais un vrai appel à l'API pour voir le résultat. Tout est bon.
+Et help, si vous avez un doute, pour afficher l'aide.
 
 *[+] Bloc optionnel*
 
-Pendant cette relecture, posez-vous toujours les mêmes questions. Est-ce que le code fait vraiment ce que j'ai demandé, ni plus ni moins ? Est-ce qu'il a modifié un fichier qui n'avait rien à voir ? Est-ce qu'il a ajouté une dépendance au projet ? Est-ce que les tests vérifient vraiment quelque chose, ou est-ce qu'ils passent quoi qu'il arrive ? Un agent peut écrire des tests qui ont l'air sérieux mais qui ne testent pas grand-chose. Si un test ne vous semble pas solide, demandez-lui de le renforcer.
+Il y en a quelques autres, plus secondaires. themes, pour changer l'apparence. editor, pour écrire une longue demande dans votre éditeur de texte habituel au lieu de la petite zone de saisie. details, pour afficher ou masquer le détail de ce que font les outils. Et thinking, pour afficher ou masquer le raisonnement du modèle, quand il en produit un. Ça ne change pas la façon dont le modèle réfléchit, seulement ce que vous voyez à l'écran. Et export, pour exporter la conversation au format Markdown : utile pour garder une trace, ou pour montrer à un collègue comment vous avez obtenu un résultat, avec chaque demande et chaque réponse de l'agent.
 
 *[fin du bloc]*
 
-## 8. Valider avec un commit
+## 6. Les deux agents : Build et Plan
 
-*À l'écran : git add, git commit avec un message clair.*
+*À l'écran : on appuie sur Tabulation ; l'indicateur d'agent change en bas à droite. On le refait pour revenir.*
 
-Dernière étape : on valide avec un commit, avec un message clair. Comme ça, on a un point de retour propre avant la suite.
+Un des réglages les plus importants se fait avec une seule touche : Tabulation. Elle permet de passer d'un agent à l'autre.
 
-Et si on regarde ce qu'on a fait : on a compris un projet inconnu, puis ajouté une fonctionnalité avec ses tests. Mais surtout, à chaque étape, on a gardé la main. Le mode Plan pour comprendre et pour réfléchir. Les autorisations pour voir chaque action. La relecture pour valider. L'agent a fait le travail mécanique, et nous, les décisions.
+Par défaut, vous êtes sur l'agent Build. Il a accès à tous les outils : il lit, il modifie, il lance des commandes. C'est lui qui fait le travail.
+
+Quand vous appuyez sur Tabulation, vous passez sur l'agent Plan. Celui-là ne peut pas modifier vos fichiers. Il peut lire le projet, réfléchir, et vous proposer un plan. C'est idéal pour comprendre un projet, ou pour discuter d'une solution avant de la lancer. Et on verra dans les cas pratiques que c'est souvent une très bonne idée de commencer par lui.
+
+Un indicateur, en bas à droite, vous dit toujours quel agent est actif. Regardez-le avant d'envoyer une demande.
 
 *[+] Bloc optionnel*
 
-*À l'écran : dans un terminal, opencode stats.*
-
-Et par curiosité, regardons ce que cette fonctionnalité a coûté. La commande opencode stats affiche des statistiques sur l'utilisation.
-
-*Commenter les chiffres réels affichés, sans les arrondir de façon trompeuse. Prévoir environ 15 secondes.*
-
-C'est une bonne habitude à prendre au début : regarder ce que coûte chaque tâche. Vous allez vite voir que l'exploration du projet et les allers-retours sur le plan comptent pour une bonne part. Et que les demandes précises coûtent moins cher que les demandes vagues, parce que l'agent fait moins de tours de boucle.
+Il existe aussi des sous-agents, qu'on appelle avec l'arobase suivie de leur nom. Open Code en fournit deux : general, pour des recherches et des tâches en plusieurs étapes, et explore, un agent rapide en lecture seule pour fouiller le code. L'agent principal peut aussi les lancer de lui-même pour se répartir le travail. Et vous pouvez créer vos propres agents, avec leurs instructions, leur modèle et leurs permissions. Par exemple un agent dédié à la relecture de code, qui n'a le droit de rien modifier.
 
 *[fin du bloc]*
 
-## 9. Conclusion et transition
+*[+] Bloc optionnel*
 
-*À l'écran : récapitulatif en quatre étapes : comprendre, planifier, construire, relire.*
+Un conseil pour choisir entre les deux. Si vous hésitez sur ce que vous voulez, ou si la tâche touche plusieurs fichiers, commencez toujours en Plan. Discutez, faites préciser, faites corriger le plan. Puis passez en Build et demandez simplement d'appliquer ce plan. L'agent garde toute la conversation, donc il sait exactement ce qui a été décidé. À l'inverse, pour une petite modification bien définie, comme renommer une variable dans un fichier, vous pouvez aller directement en Build. Le mode Plan ne sert à rien si vous savez déjà précisément ce que vous voulez.
 
-Retenez cette méthode en quatre étapes : comprendre en mode Plan, planifier en mode Plan, construire en mode Build, puis relire et valider avec git. Elle marche pour presque toutes les tâches.
+*[fin du bloc]*
 
-Dans la prochaine vidéo, on continue sur le même projet avec deux autres situations courantes : corriger un bug, et améliorer un code existant sans casser ce qui marche.
+## 7. Les demandes d'autorisation
+
+*À l'écran : avec l'agent Build, on demande « lance les tests ». Open Code affiche une demande d'autorisation pour la commande. On la lit, puis on accepte. Montrer aussi une modification de fichier avec son aperçu, et un refus.*
+
+Dans la vidéo précédente, on a réglé les permissions pour que l'agent demande avant de lancer une commande ou de modifier un fichier. Voyons à quoi ça ressemble.
+
+Je lui demande de lancer les tests. Au lieu de le faire directement, Open Code m'affiche la commande exacte qu'il veut exécuter, et attend ma réponse. Je la lis, c'est bien la commande de test du projet, j'accepte.
+
+Pour une modification de fichier, c'est pareil. L'agent me montre ce qu'il veut changer, et je décide. Si je refuse, il ne touche à rien, et je peux lui expliquer pourquoi, pour qu'il propose autre chose.
+
+Ces demandes peuvent paraître pénibles au début. Mais c'est le meilleur moyen de voir comment l'agent travaille, et de repérer tout de suite une commande qui n'a rien à faire là. Lisez-les vraiment. Une demande d'autorisation qu'on valide sans la lire ne protège de rien.
+
+## 8. Interrompre et revenir en arrière
+
+*À l'écran : on lance une demande, on appuie sur Échap pendant que l'agent travaille. Puis on fait une modification avec l'agent Build, et on tape /undo : le fichier revient à son état d'avant.*
+
+Deux réflexes indispensables maintenant.
+
+Le premier : Échap. Si l'agent part dans une mauvaise direction pendant qu'il travaille, vous appuyez sur Échap, et il s'arrête. Vous pouvez ensuite lui donner une précision, et repartir.
+
+Le deuxième : la commande undo. Elle annule votre dernière demande. Elle retire le message, les réponses qui ont suivi, et surtout, elle annule les modifications de fichiers que l'agent a faites. Et si vous avez annulé trop vite, la commande redo remet tout en place.
+
+*Montrer le fichier avant, après la modification de l'agent, puis après /undo.*
+
+Attention à une condition : pour annuler les modifications de fichiers, Open Code s'appuie sur git. Votre projet doit donc être un dépôt git. Encore une raison de toujours travailler avec git quand on utilise un agent.
+
+## 9. Les raccourcis clavier
+
+*À l'écran : ctrl+x puis n (nouvelle session), ctrl+x puis l (liste des sessions), ctrl+x puis m (modèles).*
+
+La plupart de ces commandes ont aussi un raccourci clavier. Open Code utilise ce qu'on appelle une touche leader : par défaut, c'est Contrôle et X. On appuie dessus, puis sur une lettre. Contrôle X puis N, pour une nouvelle session. Contrôle X puis L, pour la liste des sessions. Contrôle X puis M, pour les modèles. Contrôle X puis U, pour annuler.
+
+Tout ça se personnalise, ainsi que le thème, dans un fichier de configuration à part, réservé à l'interface. La liste complète des raccourcis est dans la documentation.
+
+## 10. Utiliser Open Code sans l'interface
+
+*À l'écran : dans un terminal, opencode run avec une demande courte ; la réponse s'affiche et la commande se termine.*
+
+Pour finir, on peut aussi se servir d'Open Code sans ouvrir l'interface. La commande opencode run prend une demande en paramètre, fait le travail, et rend la main. C'est pratique dans un script, ou pour une question rapide.
+
+Et on retrouve l'architecture client et serveur dont on a parlé dans la vidéo 8. La commande opencode serve lance l'agent comme un serveur, sans interface. opencode web ouvre une interface dans le navigateur. Et opencode attach permet de brancher un terminal sur un serveur qui tourne déjà.
+
+*[+] Bloc optionnel*
+
+Il y a aussi une commande pratique pour garder un œil sur vos dépenses : opencode stats, qui affiche des statistiques sur votre utilisation. Et opencode models, qu'on a déjà vue, liste tous les modèles disponibles chez vos fournisseurs. Prenez l'habitude de regarder vos statistiques de temps en temps, surtout au début : c'est le meilleur moyen de comprendre combien vous coûte réellement votre façon de travailler avec un agent.
+
+*[fin du bloc]*
+
+## 11. Conclusion et transition
+
+*À l'écran : un mémo récapitulatif à l'écran, à mettre en pause.*
+
+Récapitulons les réflexes. Arobase pour désigner un fichier. Point d'exclamation pour lancer une commande. Barre oblique pour les commandes, avec new dès qu'on change de sujet. Tabulation pour passer en mode Plan. Échap pour interrompre. Et undo pour revenir en arrière, à condition d'être dans un dépôt git.
+
+Avec ça, vous avez tout ce qu'il faut pour travailler. Dans la prochaine partie, on passe aux cas pratiques, sur un vrai projet. Et on commence par la situation la plus courante quand on arrive en entreprise : un projet qu'on ne connaît pas, et qu'il faut comprendre.

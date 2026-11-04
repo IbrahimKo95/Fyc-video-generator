@@ -1,145 +1,133 @@
-# Vidéo 7 : Open Code, coûts et souveraineté
+# Vidéo 7 : Claude Code, l'agent de développement d'Anthropic
 
-Durée visée : 9 min. Les lignes en italique décrivent l'écran ou donnent une consigne : elles ne se lisent pas.
-Enregistrer tout, y compris les blocs [+]. Au montage, les blocs [+] sont gardés seulement si la vidéo reste sous 9 min 30.
-Sources : opencode.ai/docs (intro, config, providers, agents, permissions, rules, cli), lues le 01/11/2026. Open Code évolue vite : revérifier la veille du tournage.
+Partie du plan : P4.1 « Claude Code : l'agent de développement d'Anthropic ».
+Bornes : 7:00 – 7:50 (min = quelqu'un de rapide qui lit tout, blocs [+] compris ; max = quelqu'un de posé qui ne lit que le texte principal).
+Les lignes en italique décrivent l'écran ou donnent une consigne : elles ne se lisent pas.
+Enregistrer tout, y compris les blocs [+]. Au montage, les blocs [+] sont gardés un par un tant que la vidéo reste sous sa borne max.
+Sources : code.claude.com/docs (pages overview, setup, costs, memory), lues le 01/11/2026. Revérifier la commande d'installation et les offres la veille du tournage.
 
 ## 1. Intro
 
-*À l'écran : le logo Claude Code de la fin de la vidéo 6 s'efface, le titre « Open Code » arrive.*
+*À l'écran : le titre, puis une frise courte : février 2025, mai 2025.*
 
-Dans la vidéo précédente, on a vu Claude Code : un agent très abouti, mais fermé, payant, et lié aux modèles d'Anthropic. Aujourd'hui, on passe au sujet principal de ce cours : Open Code.
+On a maintenant toute la théorie : ce qu'est un LLM, ce qu'est un agent, l'importance du contexte, et MCP. Il est temps de regarder les outils. Et on commence par celui contre lequel Open Code se positionne : Claude Code.
 
-On va voir ce que c'est, comment il est construit, et surtout ce qui le distingue de Claude Code. Puis on parlera de deux sujets qu'on oublie souvent quand on choisit un outil : combien ça coûte vraiment, et où partent vos données.
+Pourquoi le présenter dans un cours sur Open Code ? Parce que c'est la référence. C'est l'outil qui a popularisé l'idée d'un agent de développement qui vit dans le terminal. Et pour comprendre ce qu'Open Code apporte, il faut savoir à quoi on le compare.
 
-## 2. Ce qu'est Open Code
+## 2. Ce qu'est Claude Code
 
-*À l'écran : la page d'accueil d'opencode.ai, puis trois mots-clés : « terminal », « open source », « licence MIT ».*
+*À l'écran : une capture du terminal avec Claude Code lancé. Puis quatre icônes : terminal, éditeur, application, navigateur.*
 
-Open Code, c'est un agent de développement qui tourne dans votre terminal. Sur le principe, il fait la même chose que Claude Code : vous lui parlez, il lit votre projet, il modifie les fichiers, il lance les commandes. La même boucle, avec les mêmes types d'outils.
+Claude Code, c'est l'agent de développement d'Anthropic, l'entreprise qui fait les modèles Claude. Il a été présenté en avant-première en février 2025, puis ouvert à tout le monde en mai 2025.
 
-La grande différence, c'est qu'il est open source, sous licence MIT. Tout son code est public. N'importe qui peut le lire, le modifier, ou l'utiliser dans un autre projet, y compris commercial.
+À la base, c'est un outil en ligne de commande. Vous vous placez dans le dossier de votre projet, vous tapez « claude », et vous discutez avec un agent qui peut lire votre code, le modifier, et lancer des commandes. Exactement le fonctionnement qu'on a décrit dans les vidéos 3 et 4 : un modèle, des outils, une boucle.
 
-Petite précision avant d'aller plus loin. Plusieurs projets ont un nom proche, alors si vous cherchez « open code » sur internet, vous risquez de tomber sur autre chose. Le projet dont on parle dans ce cours, c'est celui du site opencode.ai. C'est là que se trouvent la documentation officielle et le lien vers le code source.
+Depuis, il s'est décliné ailleurs. On le trouve en extension pour VS Code et pour les éditeurs JetBrains, en application de bureau, et même sur le web.
 
-*[+] Bloc optionnel*
+## 3. Installation et connexion
 
-Un mot aussi sur le rythme du projet. Open Code évolue très vite. Des commandes changent de nom, des fonctionnalités apparaissent, et la documentation mentionne déjà deux versions majeures. C'est le signe d'un projet vivant, mais ça a une conséquence pratique : un tutoriel d'il y a six mois peut être en partie faux. Même pour ce cours, on a vérifié chaque commande dans la documentation officielle. Prenez ce réflexe vous aussi. Et notez que l'outil ne se met jamais à jour tout seul : c'est vous qui décidez quand passer à une nouvelle version.
+*À l'écran : la commande d'installation, puis la commande « claude » dans un dossier de projet.*
 
-*[fin du bloc]*
+L'installation se fait en une commande. Sur macOS et Linux, un script qu'on télécharge et qu'on exécute. Sur Windows, il y a l'équivalent pour PowerShell. Il existe aussi un paquet npm, mais la documentation recommande l'installation native.
 
-## 3. Le harness est ouvert
+Ensuite, il faut se connecter. Et c'est là qu'il y a un point important : Claude Code n'est pas gratuit. Il faut soit un abonnement Claude payant, comme les offres Pro ou Max, soit un compte développeur Anthropic facturé à l'usage. L'offre gratuite de Claude ne donne pas accès à Claude Code. Au premier lancement, l'outil ouvre votre navigateur pour vous connecter, et c'est tout.
 
-*À l'écran : un schéma : le harness au centre, avec un cadenas ouvert. Autour, ce qu'on peut lire : le prompt système, les descriptions d'outils, la boucle.*
+## 4. Ce qu'il sait faire
 
-Vous vous souvenez de la vidéo 3 : l'outil qu'on installe, c'est le harness, la boucle d'orchestration autour du modèle. Chez Claude Code, ce harness est fermé. Chez Open Code, il est ouvert.
+*À l'écran : les fonctionnalités apparaissent une par une, chacune avec une icône.*
 
-Concrètement, ça veut dire que vous pouvez aller lire exactement ce que l'outil envoie au modèle. Le prompt système, la description de chaque outil, la façon dont il gère le contexte. Rien n'est caché. Si vous vous demandez pourquoi l'agent a fait quelque chose, vous pouvez aller voir dans le code. Et si quelque chose ne vous plaît pas, vous pouvez le changer.
+Une fois lancé, Claude Code propose tout ce qu'on attend d'un agent de développement moderne. Et vous allez voir que beaucoup de ces idées se retrouvent dans Open Code.
 
-Pour une entreprise, c'est aussi une question de confiance. Un outil qu'on peut auditer, c'est un outil dont on peut vérifier ce qu'il envoie, et à qui.
+Il a des commandes qui commencent par une barre oblique. Par exemple, la commande init analyse votre projet et génère un fichier de mémoire de départ.
 
-## 4. Une architecture client et serveur
+Ce fichier de mémoire, chez Claude Code, s'appelle CLAUDE.md. Il contient les instructions persistantes du projet : comment le lancer, les conventions, ce qu'il faut éviter. Exactement le rôle de AGENTS.md dans Open Code. La documentation conseille d'ailleurs de le garder court, sous les deux cents lignes.
 
-*À l'écran : un serveur au centre, et plusieurs clients autour : le terminal, une page web, un script.*
+Il a un mode plan, qu'on active avec Majuscule et Tabulation. Dans ce mode, l'agent réfléchit et vous propose un plan avant de toucher au code.
 
-Autre particularité : Open Code est construit en deux morceaux. D'un côté, un serveur, qui fait tourner l'agent. De l'autre, une interface, qui est simplement un client de ce serveur.
+Il gère MCP, donc on peut lui brancher des serveurs comme Context7.
 
-Quand vous tapez « opencode » dans votre terminal, les deux se lancent ensemble et vous ne voyez pas la différence. Mais on peut aussi les séparer. Il y a une commande pour lancer le serveur seul, sans interface. Une autre pour ouvrir une interface web dans le navigateur. Et une autre pour brancher un terminal sur un serveur qui tourne déjà, éventuellement sur une autre machine.
+Il a des hooks : des commandes que vous définissez et qui se lancent automatiquement avant ou après certaines actions de l'agent. Par exemple, lancer le formatage du code après chaque modification.
 
-À quoi ça sert ? À piloter l'agent depuis d'autres outils, à le faire tourner sur un serveur distant plus puissant, ou à l'intégrer dans une chaîne d'automatisation. Il y a d'ailleurs aussi une commande pour lui passer une demande directement, sans interface, comme on l'a vu pour Claude Code.
-
-## 5. Le multi-provider, la vraie différence
-
-*À l'écran : « 75+ fournisseurs » en grand, puis des logos qui apparaissent autour : Anthropic, OpenAI, Google, Mistral, Groq, OpenRouter, et « modèles locaux ».*
-
-Et voici le point qui distingue le plus Open Code : il n'est attaché à aucun fournisseur de modèles. La documentation annonce plus de 75 fournisseurs compatibles. Il s'appuie pour ça sur une bibliothèque qui sait parler à de nombreuses API, et sur Models.dev, une base qui recense les modèles disponibles avec leurs caractéristiques.
-
-Donc vous pouvez utiliser les modèles d'Anthropic, ceux d'OpenAI, ceux de Google, de Mistral, et beaucoup d'autres. Et même n'importe quel service qui respecte le format d'API d'OpenAI, qui est devenu une sorte de standard.
-
-Mais surtout, vous pouvez faire tourner un modèle en local, sur votre propre machine, avec des outils comme Ollama ou LM Studio. Dans ce cas, aucune requête ne sort de votre ordinateur.
-
-Et vous pouvez changer de modèle à tout moment, même en pleine session. Ça permet de choisir le bon modèle pour chaque tâche : un modèle rapide et pas cher pour explorer un projet ou poser des questions, et un modèle plus puissant quand il faut écrire du code délicat.
+Et il peut lancer des sous-agents, c'est-à-dire plusieurs agents qui travaillent en parallèle sur différentes parties d'une tâche.
 
 *[+] Bloc optionnel*
 
-Attention quand même : tous les modèles ne se valent pas pour faire tourner un agent. On l'a vu dans la vidéo 3, il faut qu'un modèle soit bon pour appeler des outils de façon fiable, et enchaîner beaucoup d'actions sans se perdre. Un petit modèle local peut être très bien pour répondre à une question, et beaucoup moins à l'aise pour modifier un projet entier. La documentation d'Open Code le dit d'ailleurs pour Ollama : si les appels d'outils échouent, il faut augmenter la taille de contexte du modèle. C'est pour ça que l'équipe d'Open Code propose aussi une liste de modèles qu'elle a testés et validés avec l'outil.
+On peut aussi l'utiliser sans interface, dans un script. Avec une option dédiée, on lui passe une demande directement en ligne de commande, il fait le travail et il rend la main. C'est utile pour l'automatiser, par exemple dans une chaîne d'intégration continue. Open Code propose la même chose, on le verra. Et Claude Code permet aussi de créer ce qu'il appelle des skills : des procédures réutilisables qu'une équipe peut partager, comme une procédure de relecture de code toujours faite de la même façon.
 
 *[fin du bloc]*
 
-## 6. La configuration
+## 5. À quoi ressemble une session
 
-*À l'écran : un fichier opencode.json simple, puis un fichier AGENTS.md à côté.*
+*À l'écran : une session type, étape par étape : la demande, une demande d'autorisation, un aperçu des modifications, la réponse finale.*
 
-Côté configuration, tout passe par un fichier qui s'appelle opencode.json. Il peut exister à deux endroits : un fichier global, dans votre dossier utilisateur, pour vos réglages personnels, et un fichier dans le projet, pour les réglages propres à ce projet. Les deux se combinent.
+Concrètement, comment se passe une session ? Vous lancez Claude Code dans votre projet, et vous écrivez votre demande en français, comme dans un chat. Par exemple : « ajoute une route pour supprimer un article, avec un test ».
 
-Dedans, on peut choisir le modèle par défaut, brancher des serveurs MCP comme Context7, définir des agents personnalisés, et régler les permissions.
+L'agent commence par explorer. Il cherche les fichiers concernés, il les lit, et il vous affiche au fur et à mesure ce qu'il est en train de faire. Vous voyez passer les fichiers qu'il ouvre et les recherches qu'il lance.
 
-Pour les instructions du projet, Open Code utilise un fichier AGENTS.md à la racine. C'est l'équivalent de CLAUDE.md chez Claude Code. Mais avec une différence intéressante : AGENTS.md est une convention ouverte, que plusieurs outils savent lire. Vous l'écrivez une fois, et il sert même si vous changez d'outil. Et Open Code est assez souple : si votre projet a déjà un CLAUDE.md mais pas de AGENTS.md, il lit le CLAUDE.md à la place. Pratique si vous venez de Claude Code.
+Quand il veut modifier un fichier ou lancer une commande, il vous demande l'autorisation. Vous voyez exactement ce qu'il veut changer, sous forme de différences : les lignes retirées d'un côté, les lignes ajoutées de l'autre. Vous pouvez accepter, refuser, ou lui dire d'accepter automatiquement ce type d'action pour le reste de la session.
 
-## 7. Les agents et les permissions
+Puis il lance les tests. S'ils échouent, il lit l'erreur et il corrige, toujours dans la même boucle. Et à la fin, il vous fait un résumé de ce qu'il a fait.
 
-*À l'écran : deux cartes « Build » et « Plan », avec la touche Tabulation entre les deux. Puis un extrait de configuration des permissions.*
+Si à un moment il part dans une mauvaise direction, vous pouvez l'interrompre, et lui donner une précision. Il reprend en tenant compte de ce que vous avez dit. C'est ce dialogue permanent qui fait la différence avec un simple générateur de code : vous gardez la main, mais vous ne faites plus le travail mécanique.
 
-Open Code est livré avec deux agents principaux, entre lesquels on bascule avec la touche Tabulation. L'agent Build, celui par défaut, qui a accès à tous les outils. Et l'agent Plan, qui sert à réfléchir et à analyser : il n'a pas le droit de modifier vos fichiers, à part ses propres notes de plan. On s'en servira beaucoup dans les cas pratiques.
+Un détail sur CLAUDE.md : il peut exister à plusieurs niveaux. Il y a celui du projet, à la racine, qu'on partage avec l'équipe dans le dépôt git. Il y a un fichier personnel, dans votre dossier utilisateur, qui s'applique à tous vos projets : vos préférences à vous. Et il y a une version locale, propre à un projet mais pas partagée. Claude Code charge tout ça au démarrage. La documentation précise d'ailleurs que ces fichiers sont pris comme du contexte, pas comme des règles absolues : l'agent essaie de les suivre, mais rien ne le force à le faire.
 
-Côté permissions, chaque type d'action peut être réglé sur trois valeurs : autoriser, demander, ou refuser. Et c'est un point important à connaître : par défaut, Open Code autorise la plupart des actions sans rien demander. Y compris lancer des commandes. Seules quelques actions sensibles demandent votre accord, comme lire un fichier .env qui contient souvent des mots de passe.
+## 6. Le modèle : Claude, et seulement Claude
 
-Ça rend l'outil très fluide, mais c'est à vous de resserrer les règles si vous voulez plus de contrôle. On le fera dès l'installation, dans la prochaine vidéo.
+*À l'écran : le logo Claude Code relié à trois cases : Opus, Sonnet, Haiku. Les autres fournisseurs sont grisés.*
+
+Côté modèle, Claude Code utilise les modèles Claude d'Anthropic, et uniquement eux. Il y a plusieurs familles : des modèles très puissants, d'autres plus rapides et moins chers. On peut passer de l'un à l'autre avec une commande.
+
+Et c'est à la fois une force et une limite. Une force, parce que l'outil et les modèles sont faits par la même entreprise. Le harness est réglé finement pour ces modèles précis. Les descriptions d'outils, le prompt système, la gestion du contexte : tout est optimisé pour Claude. C'est une des raisons pour lesquelles Claude Code donne d'aussi bons résultats sans rien configurer.
+
+Mais c'est aussi une limite, parce que vous ne pouvez pas brancher un autre modèle. Pas de modèle d'un autre fournisseur, et pas de modèle qui tourne en local sur votre machine.
 
 *[+] Bloc optionnel*
 
-Petite subtilité sur l'agent Plan : il ne peut pas modifier vos fichiers, mais il n'est pas bloqué pour lancer des commandes. Pour ça, il suit vos règles de permissions générales. Donc si vos permissions autorisent toutes les commandes, l'agent Plan peut lui aussi en lancer. C'est le genre de détail qu'on ne découvre qu'en lisant la documentation, et c'est une bonne raison de régler les permissions soi-même plutôt que de compter sur les réglages par défaut.
+Même à l'intérieur de la famille Claude, le choix du modèle compte. La documentation de Claude Code le dit clairement : le modèle intermédiaire, Sonnet, gère bien la plupart des tâches de code, et coûte moins cher que le plus puissant, Opus. Et pour des tâches simples, comme les sous-agents qui font des recherches dans le code, elle montre qu'on peut utiliser le plus léger, Haiku. Autrement dit, même avec un seul fournisseur, on retrouve l'idée de choisir le bon modèle pour chaque tâche. On verra qu'Open Code pousse cette idée beaucoup plus loin, puisqu'il permet de mélanger des modèles de fournisseurs différents.
 
 *[fin du bloc]*
 
-## 8. Combien ça coûte vraiment
+## 7. Le coût
 
-*À l'écran : « Gratuit ≠ sans coût » en grand. Puis trois colonnes : « Clé API », « Abonnement », « Modèle local ».*
+*À l'écran : deux colonnes : « Abonnement » et « À l'usage ». Puis le chiffre officiel.*
 
-Parlons argent. Open Code lui-même est gratuit, puisqu'il est open source. Mais l'outil n'est que le harness. L'intelligence, elle, vient du modèle, et le modèle, il faut le payer d'une façon ou d'une autre.
+Parlons argent. Il y a deux façons de payer Claude Code. Soit votre abonnement Claude inclut l'utilisation, dans certaines limites. Soit vous utilisez un compte développeur, et vous payez chaque token consommé.
 
-Première option : vous apportez votre propre clé d'API. Vous créez un compte chez un fournisseur, vous branchez la clé dans Open Code, et vous payez chaque token consommé, au prix du fournisseur. L'avantage : vous voyez exactement ce que vous consommez, et vous choisissez le modèle selon votre budget.
-
-Deuxième option : un modèle local. Là, plus de facture par token. Mais il faut une machine assez puissante, avec une bonne carte graphique de préférence. Le modèle tourne plus lentement, et il est souvent moins capable que les gros modèles des fournisseurs.
-
-Et entre les deux, l'équipe d'Open Code propose aussi ses propres offres d'accès à des modèles, dont un abonnement à petit prix. À comparer avec ce que vous coûterait une clé d'API classique.
-
-Ce qu'il faut garder en tête, c'est qu'un agent consomme beaucoup. On l'a dit dans la vidéo 2 : à chaque tour de boucle, tout le contexte repart. Et on a vu dans la vidéo 6 l'ordre de grandeur donné par Anthropic pour Claude Code : une dizaine de dollars par développeur et par jour en moyenne en entreprise. Avec Open Code, la facture dépend entièrement du modèle choisi. Elle peut être bien plus basse avec un modèle économe, ou plus haute avec un modèle très puissant.
+Pour se faire une idée, la documentation officielle donne un ordre de grandeur pour les entreprises : en moyenne, environ 13 dollars par développeur et par jour d'utilisation. Et pour 90 % des utilisateurs, ça reste sous les 30 dollars par jour. Ce sont des chiffres d'Anthropic, mesurés sur des déploiements en entreprise, donc à prendre comme un ordre de grandeur. Mais ça montre bien qu'un agent, ça consomme.
 
 *[+] Bloc optionnel*
 
-Face à ça, l'abonnement de Claude Code a un avantage : son coût est prévisible. Vous payez un montant fixe par mois, et vous n'avez pas de mauvaise surprise, dans les limites de l'offre. Avec une clé d'API, un agent qui part en boucle pendant une heure peut coûter cher sans que vous vous en rendiez compte. C'est pour ça qu'Open Code affiche ce que la session a consommé, et que la plupart des fournisseurs permettent de fixer un plafond de dépenses. Si vous utilisez une clé d'API, réglez ce plafond dès le premier jour.
+Et on sait maintenant pourquoi. Dans la vidéo 3, on a vu qu'à chaque tour de boucle, tout le contexte repart vers le modèle : la demande, l'historique, les fichiers lus, la sortie des commandes. Une seule tâche peut demander des dizaines de tours. Donc une journée de travail avec un agent représente une quantité de tokens sans commune mesure avec quelques questions posées dans un chat. Ce n'est pas propre à Claude Code : c'est le fonctionnement de tous les agents, et on retrouvera exactement la même question avec Open Code.
 
 *[fin du bloc]*
 
-## 9. Souveraineté et confidentialité
+## 8. Forces et limites
 
-*À l'écran : trois scénarios avec une flèche vers « où partent les données » : Claude Code → Anthropic ; Open Code + fournisseur → le fournisseur choisi ; Open Code + local → reste sur la machine.*
+*À l'écran : deux colonnes « Forces » et « Limites » qui se remplissent en alternance.*
 
-Dernier sujet, et pas le moindre : où partent vos données ? Parce qu'un agent envoie au modèle votre demande, mais aussi le contenu de tous les fichiers qu'il lit, et la sortie de toutes les commandes qu'il lance. Autrement dit, une bonne partie de votre code.
+Si on résume, Claude Code a de vraies forces. Il est très bien fini. L'intégration avec les modèles est très serrée, donc les résultats sont bons dès le départ, sans configuration. Les réglages par défaut sont soignés. Et il est maintenu activement, avec des nouveautés régulières.
 
-Avec Claude Code, tout ça part chez Anthropic, selon leurs conditions d'utilisation.
+Mais il a aussi des limites. Vous êtes lié à Anthropic : un seul fournisseur de modèles. Le code de l'outil n'est pas ouvert, donc on ne peut pas vérifier exactement ce qu'il fait ni l'héberger soi-même. Il faut un abonnement ou un compte payant. Et votre code, vos demandes, le contenu des fichiers que l'agent lit, tout ça passe par les serveurs d'Anthropic.
 
-Avec Open Code et un fournisseur dans le cloud, c'est pareil : vos données partent chez ce fournisseur. Mais c'est vous qui le choisissez, avec ses conditions, ses garanties, et l'endroit où il héberge ses serveurs.
+*[+] Bloc optionnel*
 
-Et avec Open Code et un modèle local, rien ne quitte votre machine. Pour une entreprise qui travaille sur du code confidentiel, pour un secteur réglementé comme la santé ou la finance, ou simplement pour travailler sans connexion, ça peut tout changer.
+Pour beaucoup de développeurs, ces limites ne posent aucun problème. Mais pour certains projets, elles sont bloquantes. Une entreprise qui travaille sur du code confidentiel peut ne pas avoir le droit d'envoyer ce code à un service extérieur. Une équipe qui veut maîtriser son budget peut vouloir choisir un modèle moins cher pour les tâches simples. Et un développeur qui travaille souvent sans connexion ne peut tout simplement pas l'utiliser. C'est exactement pour ces cas-là qu'on s'intéresse à une alternative.
 
-Il y a aussi la question de la dépendance. Avec Claude Code, si Anthropic change ses prix ou ses conditions, vous n'avez pas d'autre choix que de suivre ou de changer d'outil. Avec Open Code, vous changez de modèle, et vous gardez votre outil, votre configuration et votre fichier AGENTS.md.
+*[fin du bloc]*
 
-## 10. Le compromis, honnêtement
+*[+] Bloc optionnel*
 
-*À l'écran : une balance : d'un côté « résultats immédiats », de l'autre « contrôle et liberté ».*
+*À l'écran : quatre paires de cartes qui se répondent : CLAUDE.md et AGENTS.md, mode plan et agent Plan, MCP et MCP, claude -p et opencode run.*
 
-Alors, Open Code est-il simplement meilleur ? Non, ce serait trop simple. C'est un compromis.
+Gardez en tête ces fonctionnalités, parce que vous allez les retrouver presque toutes dans Open Code, sous un autre nom. Le fichier CLAUDE.md a son équivalent, AGENTS.md. Le mode plan existe aussi, sous la forme d'un agent dédié. MCP fonctionne de la même façon. Les sous-agents aussi. Et le mode sans interface a son équivalent en ligne de commande. Autrement dit, si vous savez utiliser l'un, vous saurez vite utiliser l'autre. Ce qui change vraiment, ce n'est pas la façon de travailler, c'est tout ce qu'il y a autour : le code ouvert ou fermé, le choix du modèle, le prix et vos données.
 
-Claude Code, grâce à son intégration très serrée avec les modèles Claude, donne souvent de très bons résultats tout de suite, sans configuration. Open Code vous donne la liberté et le contrôle : le choix du modèle, la transparence, la maîtrise de vos données. Mais en échange, il demande un peu plus de configuration, et la qualité des résultats dépend beaucoup du modèle que vous branchez.
+*[fin du bloc]*
 
-On fera une comparaison complète à la fin du cours. Pour l'instant, retenez ça : Open Code ne remplace pas l'intelligence du modèle, il vous laisse choisir laquelle utiliser.
+## 9. Conclusion et transition
 
-## 11. Conclusion et transition
+*À l'écran : le logo Claude Code glisse sur le côté, le logo Open Code arrive.*
 
-*À l'écran : récapitulatif en quatre points, puis un terminal vide avec un curseur.*
+Claude Code, c'est donc la référence : un agent très abouti, mais fermé, payant, et attaché aux modèles d'une seule entreprise.
 
-On résume. Open Code est un agent de développement open source, sous licence MIT. Son code est lisible et modifiable. Il fonctionne en client et serveur. Il est compatible avec plus de 75 fournisseurs et avec des modèles locaux. Il est gratuit, mais le modèle, lui, se paie. Et il vous laisse décider où partent vos données.
-
-Assez de théorie. Dans la prochaine vidéo, on ouvre le terminal, on installe Open Code, et on le configure proprement, étape par étape.
+Et c'est justement là qu'Open Code entre en jeu. Un outil qui reprend la même idée, mais en open source, et qui vous laisse choisir votre modèle. Dans la prochaine vidéo, on va voir ce qu'il est, comment il fonctionne, et ce que ça change pour vos coûts et pour vos données.

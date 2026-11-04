@@ -1,7 +1,12 @@
 # Vidéo 1 : L'IA est devenue incontournable
 
-Version de référence : doc « Script — Vidéo 1 » sur claude.ai (https://claude.ai/artifact/SLXLp7tnRpm7prKEMAYKzx).
-Les lignes en italique décrivent l'écran, elles ne se lisent pas.
+Partie du plan : P1.1 « Introduction : l'IA est devenue incontournable ».
+Bornes : 6:00 – 6:45 (min = quelqu'un de rapide qui lit tout, blocs [+] compris ; max = quelqu'un de posé qui ne lit que le texte principal).
+Les lignes en italique décrivent l'écran ou donnent une consigne : elles ne se lisent pas.
+Enregistrer tout, y compris les blocs [+]. Au montage, les blocs [+] sont gardés un par un tant que la vidéo reste sous sa borne max.
+Sources : voir sources.md (Copilot et Codex, ChatGPT, Claude Code, licence d'Open Code).
+
+*Les parties 1 à 4 reprennent mot pour mot le texte déjà enregistré par Ibrahim (ancienne vidéo 1) : ces prises peuvent être réutilisées au montage. À enregistrer : les parties 5 à 8 et les blocs [+].*
 
 ## 1. Intro
 
@@ -31,6 +36,12 @@ Avant 2021, on avait surtout de l'autocomplétion un peu améliorée, avec des o
 
 En 2021, GitHub Copilot arrive, et là, c'est la première fois qu'un modèle de langage vous propose des fonctions entières, directement dans l'éditeur. Mais ça reste de la suggestion : l'outil propose, et c'est vous qui acceptez ou pas.
 
+*[+] Bloc optionnel*
+
+Derrière les débuts de Copilot, il y avait un modèle appelé Codex, présenté la même année par OpenAI dans un article de recherche. L'idée était de prendre un grand modèle de langage et de l'entraîner en plus sur une énorme quantité de code public. Et les chercheurs ont mesuré ses résultats d'une façon très concrète : on lui donne la description d'une fonction, il écrit le code, et on lance des tests pour voir si ça marche vraiment. Cette façon d'évaluer, en exécutant le code plutôt qu'en le lisant, on la retrouvera plus tard avec les agents.
+
+*[fin du bloc]*
+
 Fin 2022, ChatGPT sort, et on découvre le format conversation. On décrit son problème en français, on a une réponse. Par contre, il faut tout faire à la main : copier son code dans la fenêtre, recopier la réponse dans l'éditeur, et recommencer à la moindre erreur.
 
 En 2023 et 2024, apparaissent les premiers agents. L'idée, c'est de donner au modèle des outils et une boucle. Il peut lire des fichiers, lancer des commandes, voir ce qui se passe, et réessayer.
@@ -47,62 +58,70 @@ Avant, l'outil vous proposait du code, et c'était à vous de le copier, de le l
 
 Et forcément, ça change notre métier. Ce qui compte de plus en plus, ce n'est plus de taper vite. C'est de savoir bien cadrer un problème, donner le bon contexte à l'IA, et surtout relire du code qu'on n'a pas écrit soi-même.
 
-## 5. Qu'est-ce qu'un LLM ?
+*[+] Bloc optionnel*
 
-*À l'écran : la phrase « Le développeur relance les… », puis les barres de probabilité.*
+Attention, ça ne veut pas dire que savoir coder ne sert plus à rien. C'est même l'inverse. Pour relire le code d'un agent, il faut être capable de juger s'il est bon. Pour lui donner une demande claire, il faut avoir compris le problème. Et pour voir qu'il part dans une mauvaise direction, il faut savoir où on veut aller. Un agent entre les mains de quelqu'un qui ne sait pas coder, c'est un peu comme une voiture puissante entre les mains de quelqu'un qui n'a pas le permis. Ça avance vite, mais on ne sait pas trop où.
 
-Maintenant, ouvrons le capot. Au cœur de tous ces outils, il y a ce qu'on appelle un LLM, pour Large Language Model, un grand modèle de langage.
+*[fin du bloc]*
 
-Et en vrai, le principe est super simple. Un LLM, c'est une fonction qui prend un début de texte, et qui prédit le morceau qui vient après. C'est tout.
+## 5. Ce que l'agent fait, et ce qui reste à vous
 
-Prenons un exemple. Si je vous dis : « Le développeur relance les… », vous avez sûrement une idée de la suite. Le modèle aussi. Il calcule une probabilité pour chaque suite possible : « tests », c'est très probable, « commandes », un peu moins, « dés », presque pas. Et il choisit parmi les plus probables.
+*À l'écran : deux colonnes. À gauche « L'agent » : explorer, écrire, lancer, corriger. À droite « Vous » : décider, cadrer, relire, assumer.*
 
-Alors pourquoi ça a l'air aussi intelligent ? Juste parce que cette fonction est gigantesque, et qu'elle a été entraînée sur une quantité de texte énorme. Mais à la base, c'est vraiment ça : prédire la suite.
+Concrètement, qu'est-ce qu'on confie à un agent aujourd'hui ? Beaucoup de choses. Explorer un projet qu'on ne connaît pas et nous l'expliquer. Écrire une nouvelle fonctionnalité avec ses tests. Chercher l'origine d'un bug, le corriger, et vérifier que la correction tient. Remettre au propre un vieux code que personne n'ose toucher.
 
-## 6. Les tokens
+Et qu'est-ce qui reste à vous ? Tout ce qui demande du jugement. Choisir ce qu'on construit, et comment. Découper le travail en tâches claires. Décider si une solution est acceptable. Et surtout, assumer le résultat. Le jour où un bug arrive en production, personne ne va accepter « c'est l'agent qui l'a écrit » comme explication. Le code que vous gardez, c'est votre code.
 
-*À l'écran : le mot « développement » se découpe en trois morceaux colorés.*
+C'est cette répartition qu'on va apprendre à maîtriser tout au long du cours.
 
-Petit détail important : le modèle ne lit pas des mots. Il lit des tokens, c'est-à-dire des morceaux de mots.
+## 6. Pourquoi un cours sur Open Code ?
 
-Par exemple, un mot comme « développement » peut être découpé en trois ou quatre tokens. En anglais, on compte en moyenne un token pour à peu près quatre caractères.
+*À l'écran : deux logos côte à côte : Claude Code et Open Code. Sous Claude Code : « fermé », « un seul fournisseur ». Sous Open Code : « open source », « le modèle de votre choix ».*
 
-Et pourquoi c'est important pour nous ? Parce qu'avec un LLM, tout se compte en tokens. Ce que vous lui envoyez, ce qu'il vous répond, et donc ce que ça vous coûte. On y reviendra plus tard, notamment quand on parlera du prix d'utilisation d'un agent comme Open Code.
+Alors pourquoi un cours sur Open Code en particulier ?
 
-## 7. Comment on fabrique un LLM
+Parmi tous ces agents, celui qui a fait le plus parler de lui pour travailler dans le terminal, c'est Claude Code, l'outil d'Anthropic. Il marche très bien. Mais il a trois contraintes. Son code n'est pas ouvert. Il faut un abonnement ou un compte payant. Et il ne fonctionne qu'avec les modèles d'une seule entreprise.
 
-*À l'écran : les trois cartes apparaissent l'une après l'autre.*
+Open Code reprend la même idée : un agent de développement qui vit dans votre terminal. Mais il est open source, sous licence MIT. Tout son code est public. Et surtout, c'est vous qui choisissez le modèle qui travaille derrière. Un modèle chez un grand fournisseur, un autre chez un concurrent, ou même un modèle qui tourne sur votre propre machine, sans que rien ne sorte de chez vous.
 
-Maintenant, comment on obtient un LLM ? En gros, il y a trois étapes.
+Pour une entreprise qui veut garder la main sur ses coûts ou sur ses données, ça change beaucoup de choses. Et pour nous, c'est aussi un outil idéal pour apprendre. Comme son code est ouvert, on peut regarder comment un agent fonctionne vraiment, au lieu de le traiter comme une boîte noire.
 
-La première, c'est le pré-entraînement. On montre au modèle une quantité énorme de texte : des pages web, des livres, du code. On parle de milliers de milliards de tokens. Et on lui fait faire un seul exercice, encore et encore : deviner le token suivant. À la fin, il connaît énormément de choses, mais il ne sait pas vraiment discuter.
+*[+] Bloc optionnel*
 
-La deuxième étape, c'est le post-entraînement. On lui montre des exemples de conversations, et on l'ajuste avec des retours humains. C'est ce qu'on appelle le RLHF. C'est cette étape qui lui apprend à suivre des instructions et à répondre de façon utile.
+Open Code est un projet récent. Son dépôt de code a été créé fin avril 2025, par l'équipe derrière SST, un outil open source connu des développeurs web. Et il a beaucoup évolué depuis, très vite. C'est une bonne nouvelle, parce que le projet est vivant. Mais ça veut aussi dire qu'un tutoriel d'il y a quelques mois peut déjà être en partie dépassé. Dans ce cours, chaque commande a été vérifiée dans la documentation officielle. Et c'est un réflexe que je vous conseille de garder : avec un outil qui bouge autant, la documentation officielle passe avant tout le reste.
 
-Et la troisième étape, c'est l'inférence. Ça, c'est quand vous l'utilisez. Le modèle génère un token, l'ajoute à la suite du texte, génère le suivant, et ainsi de suite. C'est pour ça que vous voyez les réponses s'écrire petit à petit à l'écran.
+*[fin du bloc]*
 
-## 8. Ce qu'un LLM est, et ce qu'il n'est pas
+## 7. Le programme du cours
 
-*À l'écran : deux colonnes, les coches vertes puis les croix rouges.*
+*À l'écran : sept cases qui s'allument l'une après l'autre, une par partie.*
 
-De tout ça, il y a quelques points à bien retenir, parce qu'ils expliquent la plupart des comportements bizarres que vous verrez avec ces outils.
+Voici comment on va avancer.
 
-D'abord, un LLM ce n'est pas une base de données. Il ne va pas chercher une info quelque part : il génère la suite la plus probable.
+Dans la première partie, celle-ci, on pose les bases : d'où vient l'IA qu'on utilise pour coder, et ce qu'est vraiment un modèle de langage.
 
-Ensuite, il n'a pas de mémoire. Entre deux appels, il ne se souvient de rien. Tout ce qu'il sait de votre tâche, c'est ce que vous lui donnez au moment où vous l'appelez. On appelle ça le contexte, et on en reparlera beaucoup, parce que c'est central.
+Dans la deuxième, on voit comment on passe d'un simple modèle à un agent, et de quoi un agent est fait.
 
-Autre chose : il peut halluciner. Il produit du texte qui a l'air juste, pas du texte vérifié. Il peut vous inventer une fonction qui n'existe pas, avec exactement la même assurance qu'une vraie.
+La troisième partie est consacrée au contexte, c'est-à-dire tout ce qu'on donne à lire au modèle. Vous allez voir que c'est souvent là que tout se joue. On y verra aussi Context7, un outil qui donne à l'agent une documentation à jour.
 
-Il a aussi une date de coupure. Tout ce qui est sorti après son entraînement, il ne le connaît pas.
+Dans la quatrième, on présente les deux outils : Claude Code, puis Open Code.
 
-Et enfin, sa fenêtre de contexte est limitée. Il ne peut pas tout garder en tête : il y a une taille maximale à ce qu'on peut lui envoyer.
+La cinquième partie, c'est la prise en main : on installe Open Code, on le configure, et on fait le tour de l'interface.
 
-## 9. Conclusion et transition
+La sixième, c'est la pratique. Quatre cas sur un vrai projet : comprendre un code qu'on ne connaît pas, ajouter une fonctionnalité, corriger un bug, et améliorer un code existant.
 
-*À l'écran : le cerveau dans le bocal, puis l'annonce de la vidéo 2.*
+Et dans la dernière partie, on compare les deux outils, et on fait le point sur les bonnes pratiques, notamment de sécurité.
 
-Et surtout, un LLM tout seul, ça ne fait rien. Il ne lance pas de code, il n'est connecté à rien. Il prend du texte et il renvoie du texte.
+*[+] Bloc optionnel*
 
-En fait, un LLM seul, c'est un peu un cerveau dans un bocal. Très intelligent, mais sans bras ni jambes.
+Un mot sur la façon de suivre ce cours. On suppose que vous savez déjà programmer, que vous êtes à l'aise avec un terminal, et que vous connaissez les bases de git. Pour les vidéos de démonstration, je vous conseille vivement de refaire les manipulations en même temps, en mettant la vidéo en pause. Un agent, ça s'apprend surtout en le voyant se tromper, et en apprenant à le remettre sur les rails. Ça, aucune vidéo ne peut le faire à votre place.
 
-Dans la prochaine vidéo, on va voir comment on lui donne un corps : des outils, une boucle, et c'est comme ça qu'on passe d'un simple modèle à un vrai agent IA. À tout de suite !
+*[fin du bloc]*
+
+## 8. Conclusion et transition
+
+*À l'écran : la frise complète, puis un point d'interrogation sur le mot « LLM ».*
+
+Ce qu'on retient de cette introduction : en quelques années, on est passés de l'autocomplétion à des agents capables de modifier un projet entier. Et le travail du développeur s'est déplacé : moins de frappe, plus de cadrage et plus de relecture.
+
+Mais tous ces outils reposent sur la même brique de base : un grand modèle de langage, ce qu'on appelle un LLM. Avant d'aller plus loin, il faut comprendre ce que c'est, et surtout ce que ça n'est pas. C'est le sujet de la prochaine vidéo.

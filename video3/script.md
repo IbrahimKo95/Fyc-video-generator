@@ -1,154 +1,137 @@
-# Vidéo 3 : Anatomie d'un agent
+# Vidéo 3 : LLM classique vs IA agentique
 
-Durée visée : 8 min. Les lignes en italique décrivent l'écran ou donnent une consigne : elles ne se lisent pas.
-Enregistrer tout, y compris les blocs [+]. Au montage, les blocs [+] sont gardés seulement si la vidéo reste sous 9 min 30.
+Partie du plan : P2.1 « LLM classique vs IA agentique ».
+Bornes : 8:00 – 8:55 (min = quelqu'un de rapide qui lit tout, blocs [+] compris ; max = quelqu'un de posé qui ne lit que le texte principal).
+Les lignes en italique décrivent l'écran ou donnent une consigne : elles ne se lisent pas.
+Enregistrer tout, y compris les blocs [+]. Au montage, les blocs [+] sont gardés un par un tant que la vidéo reste sous sa borne max.
+Sources : voir sources.md (ReAct, SWE-bench).
 
-## 1. Intro
+## 1. Rappel et objectif
 
-*À l'écran : l'équation « LLM + outils + boucle » de la vidéo 2, puis le titre.*
+*À l'écran : le cerveau dans le bocal de la vidéo 2, puis le titre de la vidéo.*
 
-On a vu dans la vidéo précédente qu'un agent, c'est un LLM, des outils et une boucle. Dit comme ça, ça a l'air simple. Mais quand on regarde de plus près, il y a pas mal de pièces qui travaillent ensemble.
+Dans la vidéo précédente, on a vu ce qu'est un LLM. Une fonction qui prend du texte et qui prédit la suite. Très forte, mais toute seule, elle ne fait rien. Elle ne lance pas de code, elle ne lit pas vos fichiers, elle n'est branchée à rien.
 
-Dans cette vidéo, on ouvre la machine. On va suivre un tour de boucle étape par étape, puis passer en revue les six composants d'un agent. Et à la fin, vous saurez ce qui fait la différence entre un agent qui vous fait gagner une heure et un agent qui vous en fait perdre deux.
+Aujourd'hui, on va voir comment on passe de ce cerveau dans un bocal à un agent, c'est-à-dire un programme qui peut vraiment agir sur votre projet. Et pour bien comprendre ce que ça change, on va d'abord regarder comment on travaille avec un LLM classique, celui qu'on utilise tous les jours dans une fenêtre de chat.
 
-## 2. Un tour de boucle
+## 2. Le workflow classique
 
-*À l'écran : un cercle avec quatre étapes qui s'allument l'une après l'autre : perception, décision, action, observation.*
+*À l'écran : un schéma en boucle qui se construit : éditeur, copier, chat, réponse, coller, lancer, erreur, retour au chat.*
 
-Commençons par la boucle elle-même. Un tour, ça se passe en quatre temps.
+Prenons une situation que tout le monde connaît. Vous avez un bug, ou une fonction à écrire. Vous ouvrez ChatGPT, ou n'importe quel assistant du même genre.
 
-Premier temps, la perception. Le modèle reçoit tout ce qu'il faut pour décider : les instructions de départ de l'outil, ce qu'on appelle le prompt système, votre demande, l'historique de la conversation, et le résultat de tout ce qu'il a déjà fait avant.
+Vous copiez un morceau de votre code. Vous le collez dans la fenêtre, avec votre question. Le modèle vous répond avec un bout de code. Vous le recopiez dans votre éditeur. Vous lancez. Et là, ça plante.
 
-Deuxième temps, la décision. À partir de tout ça, le modèle produit soit une réponse finale, quand il estime que c'est terminé, soit un appel d'outil. Un appel d'outil, c'est un petit message structuré qui dit : je veux utiliser tel outil, avec tels paramètres. Par exemple : l'outil de lecture, sur le fichier package.json.
+Alors vous copiez le message d'erreur, vous retournez dans le chat, vous le collez. Le modèle s'excuse, il vous propose une correction. Vous la recopiez. Vous relancez. Et parfois, ça replante, et on repart pour un tour.
 
-Troisième temps, l'action. Le programme qui entoure le modèle reçoit cette demande et l'exécute vraiment. Il ouvre le fichier, il lance la commande, il fait la recherche.
+Si on regarde bien ce qui se passe, il y a quelque chose d'un peu bizarre. Le modèle écrit le code, mais c'est vous qui faites tout le reste. C'est vous qui exécutez. C'est vous qui regardez le résultat. C'est vous qui ramenez l'erreur au modèle. En fait, dans ce schéma, c'est vous le moteur d'exécution. Le modèle réfléchit, et vous, vous êtes ses mains et ses yeux.
 
-Quatrième temps, l'observation. Le résultat de l'action est ajouté à la conversation. Le contenu du fichier, la sortie de la commande, le message d'erreur.
+## 3. Les limites de ce fonctionnement
 
-Et on recommence. Le modèle relit tout, y compris ce nouveau résultat, et décide de l'étape suivante. La boucle s'arrête quand le modèle dit que c'est fini, quand une limite est atteinte, ou quand vous l'interrompez vous-même.
+*À l'écran : les cinq limites apparaissent une par une, chacune dans une carte.*
 
-*À l'écran : le déroulé de l'exemple, une ligne par tour de boucle.*
+Et ce fonctionnement a des limites assez évidentes.
 
-Pour que ce soit plus parlant, déroulons un exemple. Vous demandez : « le test de connexion échoue, corrige-le ».
+Première limite : le contexte se perd. À chaque aller-retour, vous ne montrez qu'un bout du problème. Le modèle ne sait pas ce qu'il y a dans le fichier d'à côté, ni comment votre projet est organisé.
 
-Premier tour : le modèle n'a encore rien vu. Il décide de lancer les tests, pour voir l'erreur exacte. L'outil s'exécute, et la sortie revient dans la conversation : un test échoue, avec un message qui parle d'un mot de passe mal comparé.
+Deuxième limite : c'est lent et c'est manuel. Copier, coller, relancer, recopier l'erreur. Sur une petite fonction, ça passe. Sur une vraie tâche, vous y passez l'après-midi.
 
-Deuxième tour : le modèle lit ce message, et décide de chercher dans le projet où se trouve la fonction de connexion. La recherche lui renvoie un nom de fichier.
+Troisième limite : le modèle n'a jamais accès au vrai projet. Il ne voit que ce que vous choisissez de lui montrer. S'il vous manque une info, à lui aussi.
 
-Troisième tour : il lit ce fichier. Il repère la ligne qui pose problème.
+Quatrième limite : il ne peut pas vérifier ce qu'il produit. Il vous donne du code qui a l'air correct, mais il ne l'a jamais lancé. Et on a vu dans la vidéo 2 qu'un LLM peut inventer une fonction avec autant d'assurance qu'une vraie.
 
-Quatrième tour : il modifie cette ligne.
-
-Cinquième tour : il relance les tests. Cette fois, tout passe. Il vous répond que c'est corrigé, et il vous explique ce qu'il a changé.
-
-Cinq tours de boucle, cinq allers-retours avec le modèle. Et vous, vous n'avez rien eu à copier ni à coller.
-
-## 3. Le modèle, le cerveau
-
-*À l'écran : six cartes vides en grille. La première se remplit : « Le modèle ».*
-
-Passons maintenant aux composants. Il y en a six.
-
-Le premier, c'est le modèle. C'est le cerveau, celui qui décide. Pour un agent, il ne suffit pas que le modèle soit bon en code. Il faut aussi qu'il soit bon à une chose plus précise : produire des appels d'outils propres et fiables. Choisir le bon outil, avec les bons paramètres, au bon moment. Et tous les modèles ne se valent pas là-dessus. Un modèle peut écrire du très bon code dans un chat, et se perdre complètement dès qu'il doit enchaîner vingt actions dans un vrai projet.
-
-C'est un point qu'on retrouvera avec Open Code, où c'est vous qui choisissez le modèle. Le résultat dépend énormément de ce choix.
+Et la dernière : ça ne passe pas à l'échelle. Dès qu'une modification touche trois ou quatre fichiers en même temps, le copier-coller devient ingérable.
 
 *[+] Bloc optionnel*
 
-Le modèle ne part pas de rien à chaque tour. Avant même votre demande, l'outil lui envoie un long texte d'instructions : le prompt système. C'est là qu'on lui explique qu'il est un agent de développement, quels outils il a, comment il doit se comporter, quand il doit vous demander confirmation. Vous ne le voyez jamais, mais il est là à chaque appel, et il pèse dans le contexte. Dans un outil fermé, ce texte est caché. Dans un outil open source comme Open Code, on peut aller le lire dans le code. C'est une des raisons pour lesquelles on dit qu'un outil open source est plus transparent.
+Attention, ça ne veut pas dire que ce mode de travail est inutile. Pour poser une question de cours, comprendre un message d'erreur, ou se faire expliquer un concept, une fenêtre de chat, c'est très bien. Le problème, c'est quand on essaie de l'utiliser pour faire du vrai développement sur un vrai projet. Là, on passe plus de temps à transporter de l'information entre deux fenêtres qu'à réfléchir au problème. Et c'est exactement ce que les agents viennent régler.
 
 *[fin du bloc]*
 
-## 4. Les outils
+## 4. Le saut agentique : des outils et une boucle
 
-*À l'écran : la deuxième carte se remplit : « Les outils ». À côté, un exemple de description d'outil : nom, description, paramètres.*
+*À l'écran : l'équation « modèle + outils + boucle = agent » qui se construit terme par terme.*
 
-Le deuxième composant, ce sont les outils. Techniquement, chaque outil est décrit au modèle avec trois choses : un nom, une description en langage naturel, et la liste de ses paramètres.
+Alors, qu'est-ce qui change avec un agent ? En réalité, on ajoute seulement deux choses au modèle.
 
-Pour un agent de code, on retrouve presque toujours les mêmes. Lire un fichier. Modifier ou écrire un fichier. Lancer une commande dans le terminal. Chercher un texte dans tout le projet. Lister les fichiers qui correspondent à un motif. Récupérer une page web.
+La première, ce sont des outils. Un outil, c'est une action que le modèle a le droit de demander. Lire un fichier. Écrire dans un fichier. Lancer une commande dans le terminal. Chercher un mot dans tout le projet. Aller lire une page web. Le modèle ne fait pas ces actions lui-même, il ne peut toujours produire que du texte. Mais ce texte, maintenant, peut être une demande du genre : « je veux lire le fichier server.js ». Et un programme autour du modèle exécute cette demande pour lui.
 
-Et il y a un détail qui a l'air anodin mais qui compte beaucoup. Le modèle ne connaît un outil que par la description qu'on lui en donne. Il n'a aucun autre moyen de savoir à quoi il sert. Donc si la description est floue, il va mal l'utiliser. Écrire la description d'un outil, c'est en fait écrire un prompt. Et les équipes qui font des agents passent beaucoup de temps à soigner ces textes.
+La deuxième chose, c'est une boucle. Le modèle décide d'une action. Le programme l'exécute. Le résultat est renvoyé au modèle. Le modèle lit ce résultat et décide de l'action suivante. Et ainsi de suite, jusqu'à ce que la tâche soit terminée.
+
+*À l'écran : la boucle tourne : décide, exécute, résultat, décide.*
 
 *[+] Bloc optionnel*
 
-L'idée d'apprendre à un modèle à utiliser des outils a d'abord été étudiée en recherche. Un article de 2023, appelé Toolformer, montrait qu'un modèle pouvait apprendre de lui-même quand appeler une calculatrice ou un moteur de recherche, et comment utiliser la réponse. Depuis, les fournisseurs de modèles ont intégré ça directement : on peut décrire des outils au modèle dans un format standard, et il répond avec des appels bien structurés. C'est ce mécanisme, qu'on appelle souvent function calling, qui rend les agents possibles.
+Petite précision sur l'endroit où vivent ces agents. Certains sont intégrés directement dans un éditeur de code : c'est le cas de Cursor en mode agent, par exemple, ou des extensions d'agent dans VS Code. D'autres vivent dans le terminal, comme Claude Code et Open Code. Le principe est le même, un modèle, des outils, une boucle. Ce qui change, c'est l'interface. Les agents en terminal ont un avantage : ils ne dépendent d'aucun éditeur. Vous pouvez les utiliser avec l'éditeur que vous voulez, sur un serveur distant, ou même dans un script automatisé.
 
 *[fin du bloc]*
 
-## 5. Le harness, la boucle d'orchestration
-
-*À l'écran : la troisième carte : « Le harness ». Un schéma montre le modèle à l'extérieur, relié par une flèche « API » au programme qui tourne sur votre machine.*
-
-Le troisième composant, c'est ce qu'on appelle le harness. Le mot anglais veut dire harnais. C'est tout le code qui tient l'ensemble : il envoie le contexte au modèle, il reçoit ses appels d'outils, il les exécute, il renvoie les résultats, et il fait tourner la boucle.
-
-Et c'est un point important pour la suite du cours. Quand on parle de Claude Code ou d'Open Code, on parle de ce harness. Le modèle, lui, est ailleurs. Il tourne sur les serveurs d'un fournisseur et on l'appelle par une API, ou bien il tourne en local sur votre machine. L'outil que vous installez, c'est l'orchestration autour.
-
-Ça veut dire que deux outils qui utilisent exactement le même modèle peuvent donner des résultats très différents. Tout dépend des outils qu'ils proposent, de la façon dont ils les décrivent, et de la façon dont ils gèrent la boucle.
-
-## 6. La mémoire
-
-*À l'écran : la quatrième carte : « La mémoire ». Trois étages : court terme, état de travail, long terme.*
-
-Le quatrième composant, c'est la mémoire. Et on a vu qu'un LLM n'en a pas. Donc c'est l'agent qui doit s'en occuper, à trois niveaux.
-
-Il y a d'abord la mémoire à court terme : c'est la conversation en cours, tout ce qui est dans la fenêtre de contexte.
-
-Il y a ensuite l'état de travail. Pour une grosse tâche, beaucoup d'agents se créent une liste de choses à faire, qu'ils cochent au fur et à mesure. Ça les aide à ne pas perdre le fil.
-
-Et il y a la mémoire à long terme. Ce sont des fichiers qui restent d'une session à l'autre. Dans Open Code, le principal s'appelle AGENTS.md : un fichier texte à la racine du projet, qui décrit comment le projet est organisé, comment on lance les tests, quelles conventions on suit. L'agent le relit à chaque nouvelle session.
-
-Dernier mécanisme : quand la conversation devient trop longue pour la fenêtre de contexte, l'agent peut la résumer, pour faire de la place. On appelle ça la compaction. On garde l'essentiel et on jette les détails.
-
-## 7. La planification
-
-*À l'écran : la cinquième carte : « La planification ». Une grosse tâche se découpe en une liste de quatre étapes.*
-
-Le cinquième composant, c'est la planification. Face à une tâche un peu grosse, un bon agent ne fonce pas tête baissée. Il la découpe en étapes. Certains outils vous montrent même ce plan avant de toucher au code, pour que vous puissiez le corriger. C'est le cas d'Open Code, avec un mode dédié qu'on verra en démo.
+Et ces deux ajouts changent tout. Maintenant, le modèle peut explorer votre base de code tout seul. Il peut lancer les tests, lire les erreurs, corriger, relancer. Le rôle que vous teniez dans le workflow classique, celui de moteur d'exécution, c'est l'agent qui le prend.
 
 *[+] Bloc optionnel*
 
-Certains agents vont plus loin, avec ce qu'on appelle des sous-agents. L'agent principal, face à une grosse tâche, délègue une partie du travail à un autre agent, avec sa propre conversation. Par exemple : « va chercher dans tout le projet où on utilise cette fonction, et rapporte-moi seulement la liste ». Le sous-agent fait toute l'exploration de son côté, et ne renvoie que le résultat. L'intérêt, c'est que l'agent principal garde un contexte propre, sans les dizaines de fichiers parcourus. Claude Code et Open Code proposent tous les deux ce mécanisme.
+Cette idée n'est pas sortie de nulle part. En 2022, des chercheurs ont proposé une approche appelée ReAct, pour « raisonner et agir ». Le principe : au lieu de demander au modèle une réponse directe, on le fait alterner entre une étape de réflexion, une action, puis l'observation du résultat. Et ils ont montré que les modèles font moins d'erreurs quand ils peuvent vérifier ce qu'ils avancent. Les agents qu'on utilise aujourd'hui reposent sur cette logique, en beaucoup plus abouti.
 
 *[fin du bloc]*
 
-La planification, c'est aussi la capacité à se corriger. Lire une erreur, comprendre que son hypothèse était fausse, et changer d'approche au lieu de réessayer la même chose.
+## 5. Un exemple concret : ajouter la pagination
 
-## 8. Les garde-fous
+*À l'écran : deux colonnes « Classique » et « Agent », les étapes s'affichent en parallèle.*
 
-*À l'écran : la sixième carte : « Les garde-fous ». Une fenêtre de permission : « L'agent veut lancer : npm install. Autoriser ? »*
+Prenons un exemple pour rendre ça concret. Vous avez une API, avec une route qui renvoie la liste des articles. Et on vous demande d'ajouter de la pagination : pouvoir demander la page 2, avec dix articles par page.
 
-Et le sixième composant, ce sont les garde-fous. Puisque l'agent peut agir sur votre machine, il faut pouvoir l'encadrer.
+En mode classique, vous décrivez la route au modèle. Vous collez le code du contrôleur. Il vous renvoie un extrait. Vous l'intégrez à la main, vous vous rendez compte qu'il faut aussi toucher à la couche qui lit la base de données, vous retournez lui demander. Vous lancez, il y a une erreur, vous la recopiez. Au final, plusieurs allers-retours, et c'est vous qui avez fait tout l'assemblage.
 
-Il y a les permissions : l'agent doit vous demander avant certaines actions, comme lancer une commande ou modifier un fichier. Il y a l'isolement, ce qu'on appelle le sandboxing : limiter ce que l'agent peut toucher, par exemple un seul dossier. Et il y a vous, l'humain dans la boucle, qui validez les étapes importantes.
+En mode agent, vous écrivez une seule demande : « ajoute la pagination sur la route des articles ». L'agent cherche lui-même où est définie cette route. Il lit le fichier, puis ceux qui sont autour. Il modifie le contrôleur et la couche de données, de façon cohérente. Il lance les tests. S'il y en a un qui échoue, il lit l'erreur et il corrige. Et à la fin, il vous présente l'ensemble des modifications.
 
-Attention, ces garde-fous ne sont pas toujours actifs par défaut. On verra que dans Open Code, par exemple, la plupart des actions sont autorisées d'office, et que c'est à vous de resserrer les règles.
+Et vous, qu'est-ce que vous faites pendant ce temps ? Vous relisez. Votre travail ne disparaît pas, il change de nature. Vous passez de celui qui tape à celui qui vérifie. On aura l'occasion de faire exactement cet exemple en démonstration, dans le cas pratique de la vidéo 12.
+
+## 6. Le prix de l'autonomie
+
+*À l'écran : trois cartes avec une icône d'alerte : imprévisible, il exécute, il consomme.*
+
+Évidemment, cette autonomie a un prix. Et il faut le connaître dès maintenant, parce qu'on va le retrouver tout au long du cours.
+
+D'abord, un agent est imprévisible. Il peut partir dans une mauvaise direction. Mal comprendre la demande, modifier un fichier qui n'avait rien à voir, ou tourner en rond en essayant toujours la même correction. Plus la tâche est vague, plus ce risque est grand.
+
+Ensuite, il exécute des commandes. Et ça, c'est à la fois ce qui le rend puissant et ce qui le rend dangereux. Une commande qui supprime des fichiers, qui installe un paquet douteux, qui touche à une base de données : l'agent peut la lancer. C'est pour ça que les bons outils ont un système de permissions, où il doit vous demander avant de faire certaines actions. On verra comment le régler dans Open Code.
+
+Et enfin, il consomme beaucoup. Rappelez-vous, tout se compte en tokens. Or à chaque tour de boucle, l'agent renvoie au modèle tout le contexte : votre demande, les fichiers qu'il a lus, les résultats des commandes. Une tâche qui demande vingt tours de boucle, c'est vingt fois ce contexte qui repart. Ça se paie, en temps et en argent.
 
 *[+] Bloc optionnel*
 
-Il y a un garde-fou particulier qui montre bien le problème. Open Code prévoit une protection contre ce que sa documentation appelle une « doom loop », une boucle infernale. C'est le cas où l'agent répète la même action en boucle sans avancer. Par défaut, quand ça arrive, il doit vous demander la permission de continuer. Que les développeurs aient jugé utile de prévoir ce cas en dit long : un agent qui tourne en rond, ce n'est pas un scénario théorique, ça arrive vraiment.
+Ce dernier point surprend souvent les gens qui découvrent les agents. Avec un chat, on paie à la question. Avec un agent, on paie à la tâche, et une tâche peut demander des dizaines d'échanges avec le modèle sans que vous ne voyiez rien passer. C'est pour ça que les outils comme Open Code affichent ce que la session a consommé. On y reviendra en détail dans la vidéo 8, quand on parlera du coût réel d'un agent.
 
 *[fin du bloc]*
 
-## 9. Bon agent ou agent qui boucle ?
+## 7. Ce qu'on peut confier à un agent
 
-*À l'écran : deux colonnes : à gauche, un agent qui tourne en rond ; à droite, cinq qualités qui apparaissent une par une.*
+*À l'écran : cinq cartes : nouvelle fonctionnalité, bug, refactoring, tests, documentation.*
 
-Alors, avec tout ça, qu'est-ce qui distingue un bon agent d'un agent qui tourne en rond ?
+Malgré ces limites, la liste de ce qu'on peut confier à un agent est déjà longue. Et c'est pour ça qu'il est devenu un outil de tous les jours pour beaucoup de développeurs.
 
-D'abord, de bons outils, bien décrits. Ensuite, savoir s'arrêter : un agent qui ne sait pas dire « c'est fini » ou « je n'y arrive pas » va consommer des tokens pour rien. Il faut aussi une bonne gestion du contexte, pour ne pas se noyer dans des informations qui ne servent à rien. Puis la capacité à se relever après une erreur. Et enfin, tout en bas, la qualité du modèle lui-même.
+On peut lui demander d'ajouter une fonctionnalité, comme notre pagination. Il cherche où intervenir, il modifie les bons fichiers, il vérifie que rien n'est cassé.
 
-Remarquez que sur ces cinq points, quatre dépendent du harness, pas du modèle. C'est pour ça que le choix de l'outil compte autant que le choix du modèle.
+On peut lui demander de corriger un bug. Là, il est particulièrement à l'aise si vous lui donnez un moyen de reproduire le problème, par exemple un test qui échoue. Il lance le test, il lit l'erreur, il formule une hypothèse, il corrige, il relance.
+
+On peut lui demander de refactorer, c'est-à-dire de réécrire un code pour le rendre plus propre sans changer ce qu'il fait. Renommer, découper une grosse fonction, supprimer des doublons. C'est un travail mécanique, et il le fait bien, à condition de vérifier derrière.
+
+On peut aussi lui faire écrire des tests, ou de la documentation. Un README, des commentaires, la description d'une API. Ce sont des tâches qu'on a souvent tendance à repousser, et qu'un agent fait en quelques minutes.
+
+Et enfin, il y a une utilisation qu'on oublie souvent : lui faire expliquer un projet. Vous arrivez sur un code que vous ne connaissez pas, vous lui demandez comment il est organisé, et il va le lire pour vous. C'est d'ailleurs par là qu'on commencera nos cas pratiques.
 
 *[+] Bloc optionnel*
 
-Et vous avez votre part là-dedans. Un agent qui reçoit une demande floue, sans contexte, sans moyen de vérifier son travail, va se comporter comme un mauvais agent, même s'il est excellent. À l'inverse, une demande précise, un fichier AGENTS.md à jour et une suite de tests qui tourne, ça met n'importe quel agent dans les meilleures conditions. Une bonne partie de ce cours, c'est justement apprendre à lui donner ces conditions.
+Pour mesurer ce que valent vraiment ces agents, des chercheurs ont créé en 2024 un banc d'essai appelé SWE-bench. L'idée est simple : on prend de vrais tickets, ouverts sur de vrais projets open source sur GitHub. On donne le ticket et le code à l'agent, et on regarde s'il arrive à produire une correction qui fait passer les tests du projet. C'est devenu une référence pour comparer les agents entre eux. Et c'est intéressant parce que ça ne mesure pas si le modèle sait parler de code, mais s'il sait vraiment modifier un projet existant pour résoudre un problème réel. Exactement ce qu'on attend de lui au quotidien. Autrement dit, on ne juge pas le code d'un agent en le lisant : on le juge en lançant les tests, et en regardant s'ils passent.
 
 *[fin du bloc]*
 
-## 10. Conclusion et transition
+## 8. Conclusion et transition
 
-*À l'écran : les six cartes réunies, puis le mot « contexte » qui grossit au centre.*
+*À l'écran : le schéma « LLM + outils + boucle » se transforme en deux logos : Claude Code et Open Code.*
 
-On résume. Un agent, c'est une boucle en quatre temps : percevoir, décider, agir, observer. Et six composants : le modèle, les outils, le harness, la mémoire, la planification et les garde-fous.
+Si on résume : un agent, c'est un LLM, plus des outils, plus une boucle. Le modèle réfléchit et décide. Les outils lui donnent des mains. La boucle lui permet de vérifier son travail et de recommencer.
 
-Vous avez peut-être remarqué qu'un mot est revenu sans arrêt : le contexte. Ce que le modèle reçoit à chaque tour. C'est lui qui détermine en grande partie la qualité du résultat. Et c'est le sujet de la prochaine vidéo.
+Et c'est exactement ce que sont Claude Code et Open Code. Ce ne sont pas des modèles d'IA en eux-mêmes. Ce sont des programmes qui tiennent cette boucle autour d'un modèle, avec un jeu d'outils bien choisis.
+
+Dans la prochaine vidéo, on va ouvrir cette boucle et regarder chaque pièce de près : comment le modèle appelle un outil, comment l'agent garde la mémoire de ce qu'il fait, et ce qui fait la différence entre un bon agent et un agent qui tourne en rond.

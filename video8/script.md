@@ -1,184 +1,159 @@
-# Vidéo 8 : Installer et configurer Open Code (démo)
+# Vidéo 8 : Open Code, une alternative open source
 
-Durée visée : 9 min. Vidéo en capture d'écran avec la voix par-dessus. Les lignes en italique décrivent l'écran ou donnent une consigne : elles ne se lisent pas.
-Enregistrer tout, y compris les blocs [+]. Au montage, les blocs [+] sont gardés seulement si la vidéo reste sous 9 min 30.
-Sources : opencode.ai/docs (intro, cli, tui, config, providers, mcp-servers, permissions), lues le 01/11/2026.
-
-*Écran sans voix : environ 60 s (installation, /init, réponses de l'agent), accéléré au montage.*
-
-*Avant de tourner :*
-*- Ouvrir opencode.ai/docs la veille et revérifier chaque commande. La doc parle d'Open Code 1 et d'Open Code 2, qui utilisent la même commande « opencode » et ne s'installent pas côte à côte. Ce script suit la page d'installation d'Open Code 1. Si vous filmez Open Code 2, adapter les commandes.*
-*- Sur Windows, la doc recommande WSL : filmer de préférence sous Linux, macOS ou WSL.*
-*- Préparer une clé d'API d'un fournisseur (avec un plafond de dépense réglé), ou Ollama déjà installé avec un modèle téléchargé.*
-*- Préparer le projet de démo (le même que pour les vidéos 10 et 11), déjà initialisé avec git.*
-*- Ne jamais montrer une vraie clé à l'écran : la flouter au montage, puis la révoquer après le tournage.*
+Partie du plan : P4.2 « Open Code : une alternative Open Source ».
+Bornes : 8:00 – 8:55 (min = quelqu'un de rapide qui lit tout, blocs [+] compris ; max = quelqu'un de posé qui ne lit que le texte principal).
+Les lignes en italique décrivent l'écran ou donnent une consigne : elles ne se lisent pas.
+Enregistrer tout, y compris les blocs [+]. Au montage, les blocs [+] sont gardés un par un tant que la vidéo reste sous sa borne max.
+Sources : opencode.ai/docs (intro, config, providers, agents, permissions, rules, cli), lues le 01/11/2026. Open Code évolue vite : revérifier la veille du tournage.
 
 ## 1. Intro
 
-*À l'écran : le titre, puis un terminal vide.*
+*À l'écran : le logo Claude Code de la fin de la vidéo 7 s'efface, le titre « Open Code » arrive.*
 
-Après toute cette théorie, on passe enfin à la pratique. Dans cette vidéo, on installe Open Code, on le connecte à un modèle, et on le configure proprement pour un projet. À la fin, vous aurez un agent prêt à travailler, avec des règles de sécurité raisonnables, et Context7 branché.
+Dans la vidéo précédente, on a vu Claude Code : un agent très abouti, mais fermé, payant, et lié aux modèles d'Anthropic. Aujourd'hui, on passe au sujet principal de ce cours : Open Code.
 
-Je vous conseille de faire les manipulations en même temps que moi. Mettez la vidéo en pause autant que nécessaire.
+On va voir ce que c'est, comment il est construit, et surtout ce qui le distingue de Claude Code. Puis on parlera de deux sujets qu'on oublie souvent quand on choisit un outil : combien ça coûte vraiment, et où partent vos données.
 
-## 2. Les prérequis
+## 2. Ce qu'est Open Code
 
-*À l'écran : la section « Prerequisites » de la doc officielle, puis une liste de trois points.*
+*À l'écran : la page d'accueil d'opencode.ai, puis trois mots-clés : « terminal », « open source », « licence MIT ».*
 
-Avant d'installer, trois choses à vérifier.
+Open Code, c'est un agent de développement qui tourne dans votre terminal. Sur le principe, il fait la même chose que Claude Code : vous lui parlez, il lit votre projet, il modifie les fichiers, il lance les commandes. La même boucle, avec les mêmes types d'outils.
 
-D'abord, un terminal récent. Open Code a une interface assez riche, avec des couleurs et des panneaux, et la documentation recommande des terminaux modernes, comme WezTerm, Alacritty, Ghostty ou Kitty. Le terminal de base de votre système peut marcher, mais l'affichage sera parfois moins propre.
+La grande différence, c'est qu'il est open source, sous licence MIT. Tout son code est public. N'importe qui peut le lire, le modifier, ou l'utiliser dans un autre projet, y compris commercial.
 
-Ensuite, si vous êtes sur Windows, la documentation recommande d'utiliser WSL, le sous-système Linux de Windows, pour avoir la meilleure expérience. Ça fonctionne aussi directement sous Windows, mais c'est moins confortable.
-
-Et enfin, il vous faut un modèle. Soit une clé d'API chez un fournisseur, soit un modèle local, par exemple avec Ollama. On verra les deux.
-
-## 3. L'installation
-
-*À l'écran : on tape la commande d'installation par script, puis l'installation défile. Couper ou accélérer l'attente au montage.*
-
-Pour installer, la méthode la plus simple d'après la documentation, c'est le script officiel. On le télécharge avec curl et on l'exécute.
-
-*Commande : curl -fsSL https://opencode.ai/install | bash*
-
-Petite remarque au passage : cette commande télécharge un script et l'exécute directement. C'est pratique, mais c'est exactement le genre de commande dont il faut se méfier en général. Ici, on la prend depuis le site officiel, donc on sait d'où elle vient. Mais retenez le réflexe : on ne lance jamais ce genre de commande depuis une source qu'on ne connaît pas. Et encore moins quand c'est un agent qui vous la propose.
-
-*À l'écran : la variante npm.*
-
-Si vous préférez passer par npm, c'est possible aussi. Le paquet s'appelle opencode tiret ai, et on l'installe en global.
-
-*Commande : npm install -g opencode-ai*
-
-La documentation liste aussi d'autres méthodes : Homebrew sur macOS et Linux, des gestionnaires de paquets sous Windows, ou une image Docker. Choisissez celle qui correspond à votre système.
-
-*À l'écran : opencode --version, puis le résultat.*
-
-Une fois installé, on vérifie que la commande répond, en demandant la version.
+Petite précision avant d'aller plus loin. Plusieurs projets ont un nom proche, alors si vous cherchez « open code » sur internet, vous risquez de tomber sur autre chose. Le projet dont on parle dans ce cours, c'est celui du site opencode.ai. C'est là que se trouvent la documentation officielle et le lien vers le code source.
 
 *[+] Bloc optionnel*
 
-Un point à savoir : la documentation mentionne deux versions majeures, Open Code 1 et Open Code 2. Elles utilisent la même commande, opencode, et on ne peut pas avoir les deux installées en même temps avec leur nom par défaut. Selon la méthode d'installation, vous n'aurez pas forcément la même version. Pour suivre ce cours, l'important, c'est de regarder la documentation qui correspond à la version que vous avez installée. Les grands principes restent les mêmes, mais certaines commandes peuvent changer.
+Un mot aussi sur le rythme du projet. Open Code évolue très vite. Des commandes changent de nom, des fonctionnalités apparaissent, et la documentation mentionne déjà deux versions majeures. C'est le signe d'un projet vivant, mais ça a une conséquence pratique : un tutoriel d'il y a six mois peut être en partie faux. Même pour ce cours, on a vérifié chaque commande dans la documentation officielle. Prenez ce réflexe vous aussi. Et notez que l'outil ne se met jamais à jour tout seul : c'est vous qui décidez quand passer à une nouvelle version.
 
 *[fin du bloc]*
 
-## 4. Premier lancement
+## 3. Le harness est ouvert
 
-*À l'écran : cd dans le projet de démo, puis « opencode ». L'interface s'ouvre.*
+*À l'écran : un schéma : le harness au centre, avec un cadenas ouvert. Autour, ce qu'on peut lire : le prompt système, les descriptions d'outils, la boucle.*
 
-Maintenant, on se place dans le dossier d'un projet. Open Code travaille toujours sur le dossier dans lequel on le lance. Et on tape simplement : opencode.
+Vous vous souvenez de la vidéo 4 : l'outil qu'on installe, c'est le harness, la boucle d'orchestration autour du modèle. Chez Claude Code, ce harness est fermé. Chez Open Code, il est ouvert.
 
-*À l'écran : l'interface vide, avec la zone de saisie en bas.*
+Concrètement, ça veut dire que vous pouvez aller lire exactement ce que l'outil envoie au modèle. Le prompt système, la description de chaque outil, la façon dont il gère le contexte. Rien n'est caché. Si vous vous demandez pourquoi l'agent a fait quelque chose, vous pouvez aller voir dans le code. Et si quelque chose ne vous plaît pas, vous pouvez le changer.
 
-Et voilà l'interface. On la détaillera dans la prochaine vidéo. Pour l'instant, il manque l'essentiel : un modèle. Sans modèle, l'agent n'a pas de cerveau.
+Pour une entreprise, c'est aussi une question de confiance. Un outil qu'on peut auditer, c'est un outil dont on peut vérifier ce qu'il envoie, et à qui.
 
-## 5. Connecter un fournisseur
+## 4. Une architecture client et serveur
 
-*À l'écran : on tape /connect, la liste des fournisseurs s'affiche, on en choisit un, on colle la clé (floutée).*
+*À l'écran : un serveur au centre, et plusieurs clients autour : le terminal, une page web, un script.*
 
-Pour connecter un fournisseur, on utilise la commande connect, directement dans l'interface. On tape barre oblique connect. Open Code affiche la liste des fournisseurs disponibles. On choisit le sien, et on colle la clé d'API.
+Autre particularité : Open Code est construit en deux morceaux. D'un côté, un serveur, qui fait tourner l'agent. De l'autre, une interface, qui est simplement un client de ce serveur.
 
-*À l'écran : un second terminal, la commande opencode auth login.*
-
-On peut aussi faire la même chose depuis le terminal, sans ouvrir l'interface, avec la commande opencode auth login. Et opencode auth list affiche les fournisseurs déjà connectés.
-
-*À l'écran : le chemin du fichier où sont rangées les clés.*
-
-Les clés sont rangées dans un fichier de votre dossier utilisateur, en dehors du projet. Et c'est voulu. Une clé d'API, c'est de l'argent. Quelqu'un qui la récupère peut consommer sur votre compte. Donc elle ne doit jamais se retrouver dans le dépôt git du projet, ni dans une capture d'écran, ni dans un message à un collègue.
-
-Open Code peut aussi lire les clés depuis les variables d'environnement, ou depuis un fichier .env dans le projet. Si vous faites ça, vérifiez bien que ce fichier .env est dans votre .gitignore.
+Quand vous tapez « opencode » dans votre terminal, les deux se lancent ensemble et vous ne voyez pas la différence. Mais on peut aussi les séparer. Il y a une commande pour lancer le serveur seul, sans interface. Une autre pour ouvrir une interface web dans le navigateur. Et une autre pour brancher un terminal sur un serveur qui tourne déjà, éventuellement sur une autre machine.
 
 *[+] Bloc optionnel*
 
-Et pendant qu'on parle de clés, un réflexe à prendre dès maintenant : allez dans le tableau de bord de votre fournisseur et fixez une limite de dépense. La plupart des fournisseurs le proposent. Comme ça, si un agent part en boucle, ou si votre clé fuite malgré tout, la facture ne peut pas dépasser un montant que vous avez choisi. Ça prend deux minutes, et ça peut vous éviter une très mauvaise surprise.
+À quoi ça sert ? À piloter l'agent depuis d'autres outils, à le faire tourner sur un serveur distant plus puissant, ou à l'intégrer dans une chaîne d'automatisation. Il y a d'ailleurs aussi une commande pour lui passer une demande directement, sans interface, comme on l'a vu pour Claude Code.
 
 *[fin du bloc]*
 
-## 6. Choisir un modèle
+## 5. Le multi-provider, la vraie différence
 
-*À l'écran : /models, la liste des modèles, on en sélectionne un. Le nom du modèle apparaît dans la barre d'état.*
+*À l'écran : « 75+ fournisseurs » en grand, puis des logos qui apparaissent autour : Anthropic, OpenAI, Google, Mistral, Groq, OpenRouter, et « modèles locaux ».*
 
-Une fois le fournisseur connecté, on choisit le modèle avec la commande models. La liste affiche tous les modèles disponibles chez les fournisseurs connectés. On en sélectionne un, et c'est lui qui sera utilisé pour la suite.
+Et voici le point qui distingue le plus Open Code : il n'est attaché à aucun fournisseur de modèles. La documentation annonce plus de 75 fournisseurs compatibles. Il s'appuie pour ça sur une bibliothèque qui sait parler à de nombreuses API, et sur Models.dev, une base qui recense les modèles disponibles avec leurs caractéristiques.
 
-On peut en changer à tout moment, même au milieu d'une session. C'est pratique pour utiliser un modèle léger pour explorer, et un modèle plus costaud pour coder.
+Donc vous pouvez utiliser les modèles d'Anthropic, ceux d'OpenAI, ceux de Google, de Mistral, et beaucoup d'autres. Et même n'importe quel service qui respecte le format d'API d'OpenAI, qui est devenu une sorte de standard.
 
-## 7. Le fichier de configuration
+Mais surtout, vous pouvez faire tourner un modèle en local, sur votre propre machine, avec des outils comme Ollama ou LM Studio. Dans ce cas, aucune requête ne sort de votre ordinateur.
 
-*À l'écran : on crée opencode.json à la racine du projet, et on le remplit au fur et à mesure qu'on en parle.*
-
-Maintenant, on va configurer le projet. Ça se passe dans un fichier opencode.json, à la racine.
-
-*À l'écran : la ligne $schema.*
-
-On commence par une ligne qui indique le schéma officiel. Elle ne change rien au fonctionnement, mais elle permet à votre éditeur de proposer l'autocomplétion et de signaler les erreurs dans le fichier.
-
-*À l'écran : la clé « model », au format fournisseur/modèle.*
-
-On peut fixer le modèle par défaut pour ce projet, avec le nom du fournisseur, une barre oblique, et le nom du modèle. La commande opencode models, dans le terminal, liste les noms exacts.
-
-*À l'écran : le bloc « permission » avec bash et edit sur « ask ».*
-
-Ensuite, et c'est le plus important, les permissions. On l'a dit dans la vidéo précédente : par défaut, Open Code autorise la plupart des actions sans rien demander, y compris lancer des commandes. Pour un premier projet, je vous conseille de passer les commandes et les modifications de fichiers en mode « ask ». L'agent devra vous demander avant chaque commande et chaque modification. C'est un peu plus lent, mais vous voyez tout ce qu'il fait, et vous apprenez comment il travaille.
-
-Une fois que vous serez à l'aise, vous pourrez assouplir. La documentation montre par exemple comment autoriser automatiquement les commandes git ou npm, tout en refusant les commandes de suppression.
-
-*À l'écran : le bloc « mcp » avec context7, type remote, et son adresse.*
-
-Et enfin, on branche Context7, le serveur MCP qu'on a vu dans la vidéo 5. Un bloc mcp, avec un nom, le type « remote » parce que le serveur est distant, et son adresse. C'est tout. À partir de maintenant, quand vous ajouterez « use context7 » dans une demande, l'agent pourra aller chercher une documentation à jour.
-
-*À l'écran : on relance opencode pour prendre en compte la configuration.*
-
-On enregistre, et on relance Open Code pour qu'il prenne en compte la configuration.
+Et vous pouvez changer de modèle à tout moment, même en pleine session. Ça permet de choisir le bon modèle pour chaque tâche : un modèle rapide et pas cher pour explorer un projet ou poser des questions, et un modèle plus puissant quand il faut écrire du code délicat.
 
 *[+] Bloc optionnel*
 
-*À l'écran : le chemin du fichier de configuration global, dans le dossier utilisateur.*
-
-Ce fichier opencode.json est propre au projet. Mais il existe aussi un fichier de configuration global, dans votre dossier utilisateur, qui s'applique à tous vos projets. Les deux se combinent : le fichier du projet complète le fichier global, et prend le dessus en cas de conflit. En pratique, on met dans le global ce qui nous concerne nous, comme notre modèle préféré ou nos permissions habituelles. Et dans le projet, ce qui concerne toute l'équipe, comme les serveurs MCP utiles au projet. Et ce fichier de projet, on peut le partager dans git, puisqu'il ne contient aucune clé.
+Attention quand même : tous les modèles ne se valent pas pour faire tourner un agent. On l'a vu dans la vidéo 4, il faut qu'un modèle soit bon pour appeler des outils de façon fiable, et enchaîner beaucoup d'actions sans se perdre. Un petit modèle local peut être très bien pour répondre à une question, et beaucoup moins à l'aise pour modifier un projet entier. La documentation d'Open Code le dit d'ailleurs pour Ollama : si les appels d'outils échouent, il faut augmenter la taille de contexte du modèle. C'est pour ça que l'équipe d'Open Code propose aussi une liste de modèles qu'elle a testés et validés avec l'outil.
 
 *[fin du bloc]*
 
-## 8. Le fichier AGENTS.md avec /init
+## 6. La configuration
 
-*À l'écran : on tape /init. L'agent explore le projet. Accélérer au montage. Puis on ouvre le fichier AGENTS.md généré.*
+*À l'écran : un fichier opencode.json simple, puis un fichier AGENTS.md à côté.*
 
-Dernière étape : on va donner à l'agent sa mémoire de projet. On tape barre oblique init.
+Côté configuration, tout passe par un fichier qui s'appelle opencode.json. Il peut exister à deux endroits : un fichier global, dans votre dossier utilisateur, pour vos réglages personnels, et un fichier dans le projet, pour les réglages propres à ce projet. Les deux se combinent.
 
-*Pendant que l'agent travaille, commenter ce qu'on voit réellement passer à l'écran : les fichiers qu'il lit, les recherches qu'il fait. Prévoir environ 20 secondes.*
+Dedans, on peut choisir le modèle par défaut, brancher des serveurs MCP comme Context7, définir des agents personnalisés, et régler les permissions.
 
-L'agent analyse le projet et crée un fichier AGENTS.md à la racine. Regardons ce qu'il a écrit. On y trouve en général une description du projet, les commandes pour l'installer et lancer les tests, et les conventions qu'il a repérées dans le code.
+Pour les instructions du projet, Open Code utilise un fichier AGENTS.md à la racine. C'est l'équivalent de CLAUDE.md chez Claude Code. Mais avec une différence intéressante : AGENTS.md est une convention ouverte, que plusieurs outils savent lire. Vous l'écrivez une fois, et il sert même si vous changez d'outil. Et Open Code est assez souple : si votre projet a déjà un CLAUDE.md mais pas de AGENTS.md, il lit le CLAUDE.md à la place. Pratique si vous venez de Claude Code.
 
-Ce fichier, relisez-le. L'agent a pu se tromper, ou rater une information importante. Corrigez ce qui ne va pas, et ajoutez ce que lui ne pouvait pas deviner : les pièges du projet, ce qu'il ne faut jamais toucher. Puis, comme le conseille la documentation, ajoutez-le au dépôt git, pour que toute l'équipe en profite.
+## 7. Les agents et les permissions
 
-## 9. Un premier test
+*À l'écran : deux cartes « Build » et « Plan », avec la touche Tabulation entre les deux. Puis un extrait de configuration des permissions.*
 
-*À l'écran : on passe en mode Plan avec Tabulation, puis on tape la demande. Montrer la réponse réelle de l'agent, accélérée si elle est longue.*
+Open Code est livré avec deux agents principaux, entre lesquels on bascule avec la touche Tabulation. L'agent Build, celui par défaut, qui a accès à tous les outils. Et l'agent Plan, qui sert à réfléchir et à analyser : il n'a pas le droit de modifier vos fichiers, à part ses propres notes de plan. On s'en servira beaucoup dans les cas pratiques.
 
-Avant d'aller plus loin, on vérifie que tout fonctionne avec une demande simple et sans risque. Je passe en mode Plan avec la touche Tabulation, pour que l'agent ne modifie rien. Et je lui demande : « en trois phrases, à quoi sert ce projet, et comment on lance les tests ? »
+Côté permissions, chaque type d'action peut être réglé sur trois valeurs : autoriser, demander, ou refuser. Et c'est un point important à connaître : par défaut, Open Code autorise la plupart des actions sans rien demander. Y compris lancer des commandes. Seules quelques actions sensibles demandent votre accord, comme lire un fichier .env qui contient souvent des mots de passe.
 
-*Commenter brièvement la réponse réelle : est-ce qu'elle est juste ? Est-ce qu'elle reprend des informations du fichier AGENTS.md ? Prévoir environ 15 secondes.*
-
-Si l'agent répond correctement, c'est que tout est en place : le fournisseur est connecté, le modèle répond, et l'agent arrive à lire le projet. Si vous avez une erreur à ce stade, c'est presque toujours un problème de clé ou de nom de modèle. Revérifiez la connexion avec opencode auth list, et le nom exact du modèle avec opencode models.
-
-Et pour tester Context7, on peut lui poser une question sur une bibliothèque du projet, en ajoutant « use context7 » à la fin. Si tout est bien branché, vous verrez passer un appel vers Context7 dans le fil de la conversation, avant la réponse.
-
-## 10. Variante : un modèle local avec Ollama
-
-*À l'écran : un bloc « provider » pour Ollama dans opencode.json, avec l'adresse locale. Vérifier l'exemple exact dans la doc, page Providers, section Ollama.*
-
-Si vous préférez ne rien envoyer à l'extérieur, vous pouvez utiliser un modèle local. Avec Ollama installé et un modèle téléchargé, on ajoute dans la configuration un fournisseur qui pointe vers l'adresse locale d'Ollama. Open Code lui parle comme à n'importe quel autre fournisseur.
-
-Gardez en tête ce qu'on a dit dans la vidéo précédente : un modèle local est souvent moins à l'aise pour enchaîner des actions qu'un gros modèle dans le cloud. La documentation précise d'ailleurs que si les appels d'outils échouent avec Ollama, il faut augmenter la taille de contexte du modèle.
+Ça rend l'outil très fluide, mais c'est à vous de resserrer les règles si vous voulez plus de contrôle. On le fera dès l'installation, dans la prochaine vidéo.
 
 *[+] Bloc optionnel*
 
-Et pour savoir si votre machine peut suivre, testez sur une petite tâche avant de vous lancer sur un vrai projet. Demandez par exemple à l'agent d'expliquer un seul fichier, puis de faire une petite modification. Si chaque réponse prend plusieurs minutes, ou si l'agent n'arrive pas à utiliser ses outils correctement, il vaut mieux passer par un fournisseur dans le cloud pour les tâches lourdes, et garder le modèle local pour les questions simples.
+Petite subtilité sur l'agent Plan : il ne peut pas modifier vos fichiers, mais il n'est pas bloqué pour lancer des commandes. Pour ça, il suit vos règles de permissions générales. Donc si vos permissions autorisent toutes les commandes, l'agent Plan peut lui aussi en lancer. C'est le genre de détail qu'on ne découvre qu'en lisant la documentation, et c'est une bonne raison de régler les permissions soi-même plutôt que de compter sur les réglages par défaut.
 
 *[fin du bloc]*
+
+## 8. Combien ça coûte vraiment
+
+*À l'écran : « Gratuit ≠ sans coût » en grand. Puis trois colonnes : « Clé API », « Abonnement », « Modèle local ».*
+
+Parlons argent. Open Code lui-même est gratuit, puisqu'il est open source. Mais l'outil n'est que le harness. L'intelligence, elle, vient du modèle, et le modèle, il faut le payer d'une façon ou d'une autre.
+
+Première option : vous apportez votre propre clé d'API. Vous créez un compte chez un fournisseur, vous branchez la clé dans Open Code, et vous payez chaque token consommé, au prix du fournisseur. L'avantage : vous voyez exactement ce que vous consommez, et vous choisissez le modèle selon votre budget.
+
+Deuxième option : un modèle local. Là, plus de facture par token. Mais il faut une machine assez puissante, avec une bonne carte graphique de préférence. Le modèle tourne plus lentement, et il est souvent moins capable que les gros modèles des fournisseurs.
+
+*[+] Bloc optionnel*
+
+Et entre les deux, l'équipe d'Open Code propose aussi ses propres offres d'accès à des modèles, dont un abonnement à petit prix. À comparer avec ce que vous coûterait une clé d'API classique.
+
+*[fin du bloc]*
+
+Ce qu'il faut garder en tête, c'est qu'un agent consomme beaucoup. On l'a dit dans la vidéo 3 : à chaque tour de boucle, tout le contexte repart. Et on a vu dans la vidéo 7 l'ordre de grandeur donné par Anthropic pour Claude Code : environ 13 dollars par développeur et par jour en moyenne, en entreprise. Avec Open Code, la facture dépend entièrement du modèle choisi. Elle peut être bien plus basse avec un modèle économe, ou plus haute avec un modèle très puissant.
+
+*[+] Bloc optionnel*
+
+Face à ça, l'abonnement de Claude Code a un avantage : son coût est prévisible. Vous payez un montant fixe par mois, et vous n'avez pas de mauvaise surprise, dans les limites de l'offre. Avec une clé d'API, un agent qui part en boucle pendant une heure peut coûter cher sans que vous vous en rendiez compte. C'est pour ça qu'Open Code affiche ce que la session a consommé, et que la plupart des fournisseurs permettent de fixer un plafond de dépenses. Si vous utilisez une clé d'API, réglez ce plafond dès le premier jour.
+
+*[fin du bloc]*
+
+## 9. Souveraineté et confidentialité
+
+*À l'écran : trois scénarios avec une flèche vers « où partent les données » : Claude Code → Anthropic ; Open Code + fournisseur → le fournisseur choisi ; Open Code + local → reste sur la machine.*
+
+Dernier sujet, et pas le moindre : où partent vos données ? Parce qu'un agent envoie au modèle votre demande, mais aussi le contenu de tous les fichiers qu'il lit, et la sortie de toutes les commandes qu'il lance. Autrement dit, une bonne partie de votre code.
+
+Avec Claude Code, tout ça part chez Anthropic, selon leurs conditions d'utilisation.
+
+Avec Open Code et un fournisseur dans le cloud, c'est pareil : vos données partent chez ce fournisseur. Mais c'est vous qui le choisissez, avec ses conditions, ses garanties, et l'endroit où il héberge ses serveurs.
+
+Et avec Open Code et un modèle local, rien ne quitte votre machine. Pour une entreprise qui travaille sur du code confidentiel, pour un secteur réglementé comme la santé ou la finance, ou simplement pour travailler sans connexion, ça peut tout changer.
+
+*[+] Bloc optionnel*
+
+Il y a aussi la question de la dépendance. Avec Claude Code, si Anthropic change ses prix ou ses conditions, vous n'avez pas d'autre choix que de suivre ou de changer d'outil. Avec Open Code, vous changez de modèle, et vous gardez votre outil, votre configuration et votre fichier AGENTS.md.
+
+*[fin du bloc]*
+
+## 10. Le compromis, honnêtement
+
+*À l'écran : une balance : d'un côté « résultats immédiats », de l'autre « contrôle et liberté ».*
+
+Alors, Open Code est-il simplement meilleur ? Non, ce serait trop simple. C'est un compromis.
+
+Claude Code, grâce à son intégration très serrée avec les modèles Claude, donne souvent de très bons résultats tout de suite, sans configuration. Open Code vous donne la liberté et le contrôle : le choix du modèle, la transparence, la maîtrise de vos données. Mais en échange, il demande un peu plus de configuration, et la qualité des résultats dépend beaucoup du modèle que vous branchez.
+
+On fera une comparaison complète à la fin du cours. Pour l'instant, retenez ça : Open Code ne remplace pas l'intelligence du modèle, il vous laisse choisir laquelle utiliser.
 
 ## 11. Conclusion et transition
 
-*À l'écran : le projet avec ses deux nouveaux fichiers : opencode.json et AGENTS.md.*
+*À l'écran : récapitulatif en quatre points, puis un terminal vide avec un curseur.*
 
-Récapitulons. On a installé Open Code, connecté un fournisseur, choisi un modèle, et créé une configuration de projet avec des permissions plus prudentes et Context7 branché. Et on a généré un fichier AGENTS.md, qu'on a relu et ajouté au dépôt.
+On résume. Open Code est un agent de développement open source, sous licence MIT. Son code est lisible et modifiable. Il fonctionne en client et serveur. Il est compatible avec plus de 75 fournisseurs et avec des modèles locaux. Il est gratuit, mais le modèle, lui, se paie. Et il vous laisse décider où partent vos données.
 
-Notre agent est prêt. Dans la prochaine vidéo, on fait le tour de l'interface : comment écrire une demande, désigner des fichiers, passer en mode plan, gérer ses sessions et revenir en arrière quand l'agent s'est trompé.
+Assez de théorie. Dans la prochaine vidéo, on ouvre le terminal, on installe Open Code, et on le configure proprement, étape par étape.

@@ -17,24 +17,30 @@ Réponds en français. Ibrahim parle de façon familière ; reste simple et dire
 1. **Ne jamais inventer le contenu du cours.** Le poster, la fiche, les scripts décrivent uniquement ce que le cours fait réellement. Pas de comparaison chiffrée, d'expérience ou de QCM qui n'existe pas encore. En cas de doute, demander.
 2. **Sources** : chaque info factuelle va dans `sources.md` avec son lien, où elle est utilisée et son statut (vérifiée / à vérifier). Mettre ce fichier à jour à chaque nouvelle info. Copie aussi dans le projet claude.ai « FYC » (`claude/sources_fyc.md`).
 3. **Écriture anti-IA** (scripts, fiche, poster) : langage naturel et simple, phrases de longueurs variées, pas de tirets longs, pas de « crucial », « révolutionner », « en somme », « dans un monde où », pas de triplets d'adjectifs, pas de gras partout. Les scripts doivent pouvoir être lus à voix haute sans sonner récité.
-4. **Durées** : mesuré sur la vidéo 1 montée, Ibrahim fait environ **230 mots/min** (1 088 mots pour 4 min 44 ; l'ancienne estimation de 170 était fausse). Plusieurs personnes tournent, donc le débit varie (compter 160 pour quelqu'un de posé). Chaque script a un texte principal et des blocs « [+] Bloc optionnel » : tout le monde enregistre tout, et au montage on garde les blocs [+] un par un tant que la vidéo reste sous 9 min 30. Vérifier les durées avec `python outils/compter_mots.py video*/script.md` : chaque vidéo doit rester entre 5 et 10 min pour 160 comme pour 230 mots/min, et le total au-dessus de 1 h 30 même à 230. Règles détaillées : `plan_tournage.md`.
+4. **Durées** : mesuré sur la vidéo 1 montée, Ibrahim fait environ **230 mots/min** (1 088 mots pour 4 min 44 ; l'ancienne estimation de 170 était fausse). Plusieurs personnes tournent, donc le débit varie (compter 160 pour quelqu'un de posé). Chaque script a un texte principal et des blocs « [+] Bloc optionnel », et une ligne « Bornes : min – max » : min = rapide (230) qui lit tout, max = posé (160) sans les blocs. Tout le monde enregistre tout, et au montage on garde les blocs [+] un par un tant que la vidéo reste sous sa borne max. Aucun temps d'attente n'est compté (installations et agent qui travaille sont coupés ou accélérés au montage) : la durée, c'est la voix. Objectif choisi par Ibrahim (04/11/2026) : **total entre 1 h 45 et 2 h**, chaque vidéo entre 5 et 10 min. Vérifier avec `python outils/compter_mots.py video{1..16}/script.md` (tout doit être « OK »). Règles détaillées : `plan_tournage.md`.
 
 ## Plan des vidéos
 
-| # | Vidéo | Durée visée |
-|---|---|---|
-| 1 | L'IA incontournable + qu'est-ce qu'un LLM | 7 min |
-| 2 | Du LLM classique à l'agent IA | 8 min |
-| 3 | Anatomie d'un agent | 8 min |
-| 4 | Le contexte, carburant de l'IA | 7 min |
-| 5 | MCP et Context7 | 8 min |
-| 6 | Claude Code | 6 min |
-| 7 | Open Code, coûts et souveraineté | 9 min |
-| 8 | Installer et configurer (démo) | 9 min |
-| 9 | L'interface et les commandes (démo) | 7 min |
-| 10 | Cas pratique : comprendre + ajouter une feature (démo) | 10 min |
-| 11 | Cas pratique : bug + refactor (démo) | 8 min |
-| 12 | Comparatif, bonnes pratiques, conclusion | 9 min |
+Refait le 04/11/2026 sur le plan en 7 parties du Word des collègues : une vidéo par sous-partie, la conclusion est à la fin de la vidéo 16.
+
+| # | Partie | Vidéo | Bornes |
+|---|---|---|---|
+| 1 | P1.1 | L'IA est devenue incontournable | 6:00 – 6:45 |
+| 2 | P1.2 | Qu'est-ce qu'un LLM ? | 6:45 – 7:30 |
+| 3 | P2.1 | LLM classique vs IA agentique | 8:00 – 8:55 |
+| 4 | P2.2 | Les composants d'un agent IA | 5:30 – 6:10 |
+| 5 | P3.1 | Le contexte : le carburant de l'IA | 7:30 – 8:20 |
+| 6 | P3.2 | Context7 (MCP expliqué en premier) | 6:45 – 7:30 |
+| 7 | P4.1 | Claude Code | 7:00 – 7:50 |
+| 8 | P4.2 | Open Code : une alternative open source | 8:00 – 8:55 |
+| 9 | P5.1 | Installer et configurer Open Code (démo) | 6:10 – 6:55 |
+| 10 | P5.2 | Découvrir l'interface et les fonctionnalités (démo) | 6:10 – 6:55 |
+| 11 | P6.1 | Cas pratique : comprendre un projet (démo) | 5:40 – 6:20 |
+| 12 | P6.2 | Cas pratique : développer une fonctionnalité (démo) | 6:30 – 7:15 |
+| 13 | P6.3 | Cas pratique : corriger un bug (démo) | 6:10 – 6:50 |
+| 14 | P6.4 | Cas pratique : améliorer un code existant (démo) | 6:10 – 6:50 |
+| 15 | P7.1 | Open Code vs Claude Code | 6:00 – 6:45 |
+| 16 | P7.2 + Conclusion | Bonnes pratiques et conclusion | 8:00 – 8:55 |
 
 Contenu détaillé de chaque partie : `docs_reference/plan_open_code_collegues.docx` (le script de cours des collègues, fait avec ChatGPT : s'en servir comme base de contenu, jamais le recopier).
 
@@ -70,8 +76,7 @@ Son : une palette variée de bruitages synthétisés (`outils/sons.py`, 7 famill
 
 ## Fichiers
 
-- `video1/script.md` : script de la vidéo 1 (version de référence : doc claude.ai https://claude.ai/artifact/SLXLp7tnRpm7prKEMAYKzx). `video1/complement.md` : deux passages à enregistrer pour passer la vidéo 1 au-dessus de 5 min.
-- `video2/` à `video12/script.md` : scripts des autres vidéos (écrits le 01/11/2026 à partir du plan des collègues et des docs officielles, à relire par le groupe).
+- `video1/` à `video16/script.md` : scripts des 16 vidéos (réécrits le 04/11/2026 sur le nouveau plan, à relire par le groupe). L'ancienne vidéo 1 enregistrée par Ibrahim est répartie entre les nouvelles vidéos 1 et 2 : chaque script dit quelles parties reprennent mot pour mot le texte déjà enregistré. Les fichiers de montage de `video1/` (edl, visuel, timeline, srt) correspondent à l'ancien script : à refaire. L'ancienne version des scripts est dans le commit edbc2c2.
 - `plan_tournage.md` : règles de tournage pour le groupe et durées estimées.
 - `fiche/` : fiche scientifique (LaTeX, `xelatex fiche_scientifique.tex` deux fois ; polices Roboto dans `fiche/fonts/`).
 - `poster/poster.dc.html` : poster A3 (l'original modifiable est l'artifact Design https://claude.ai/artifact/Y1Tavudm2Kw7UCPgVW9Tzy). Problématique retenue : « OpenCode est-il une alternative crédible à Claude Code, et comment l'utiliser efficacement et en sécurité sur un vrai projet ? »
@@ -80,12 +85,11 @@ Son : une palette variée de bruitages synthétisés (`outils/sons.py`, 7 famill
 
 ## À faire
 
-- [ ] Vidéo 1 : monter la voix enregistrée, refaire le visuel en version sobre, sous-titres
-- [ ] Vidéo 1 : enregistrer `video1/complement.md` et remonter (la version actuelle fait 4 min 44, sous le minimum de 5 min)
+- [ ] Vidéos 1 et 2 : enregistrer les parties nouvelles (indiquées en tête de chaque script), puis remonter chaque vidéo en réutilisant les prises de l'ancienne vidéo 1
 - [ ] Pitch de 2 min pour la séance 3
 - [ ] Vidéo de présentation de l'équipe (3-4 min)
-- [ ] Faire relire les scripts des vidéos 2 à 12 par le groupe, puis répartir qui tourne quoi
-- [ ] Valider et préparer le projet de démo des vidéos 8 à 11 (proposé : petite API Node.js/Express d'articles avec tests)
+- [ ] Faire relire et reformuler les scripts des vidéos 1 à 16 par le groupe. Répartition (04/11/2026, voir `plan_tournage.md`) : Ibrahim 1-4, membre 2 : 5-8, membre 3 : 9-12 (prépare le projet de démo), membre 4 : 13-16. Mettre les prénoms.
+- [ ] Valider et préparer le projet de démo des vidéos 9 à 14 (proposé : petite API Node.js/Express d'articles avec tests)
 - [ ] Cas pratique (3 parties + corrections vidéo), glossaire, rapport de veille
 - [ ] Test final (QCM)
 - [ ] Remplacer noms, mentor, logos et couleurs ESGI dans la fiche et le poster
